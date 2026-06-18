@@ -61,4 +61,4 @@ MIT License
 
 ---
 
-Made with ❤️ by Anmol Anand.
+Made with ❤️ by sudo_why.
