@@ -1,13 +1,14 @@
 module.exports = (message) => {
-  message.reply(`
-👤 Operative: sudo_why
+  const { EmbedBuilder } = require("discord.js");
 
-⭐ Level: 1
-📈 XP: 0/100
-💰 Credits: 500
+  const profileEmbed = new EmbedBuilder()
+    .setTitle("👤 Player Profile")
+    .setDescription("Welcome to Cyber RPG!")
+    .addFields(
+      { name: "⭐ Level", value: "1", inline: true },
+      { name: "💰 Credits", value: "500", inline: true },
+      { name: "📈 XP", value: "0/100", inline: true },
+    );
 
-🎒 Inventory
-💻 Old Laptop
-📡 WiFi Adapter
-`);
+  message.reply({ embeds: [profileEmbed]});
 };

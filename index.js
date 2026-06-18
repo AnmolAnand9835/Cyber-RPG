@@ -9,6 +9,7 @@ const profile = require('./commands/command.profile')
 const explore = require('./commands/command.explore')
 const shop = require('./commands/command.shop')
 const daily = require('./commands/command.daily')
+const inventory = require('./commands/command.inventory')
 
 
 const client = new Client({
@@ -46,6 +47,10 @@ client.on("messageCreate", (message) => {
 
   if (message.content === "sudo daily"){
     daily(message)
+  }
+
+  if (message.content === "sudo inventory"){
+    inventory(message)
   }
 });
 

@@ -1,31 +1,17 @@
 module.exports = (message) => {
-  const randomNumber = Math.floor(Math.random() * 3);
+  const outcomes = [
+    `📦 Found a Supply Crate!`,
+    `🤖 Defeated a Rogue Bot!`,
+    `💎 Found a Data Shard!`,
+    `🗺️ Discovered an Abandoned Server!`,
+    `🔋 Found a Battery Pack!`,
+    `💰 Found Credits on the Ground!`,
+    `⚠️ Ambushed by Scavengers!`,
+    `🛰️ Discovered a Satellite Station!`,
+    `📡 Repaired an Old Antenna!`,
+    `❌ Nothing Found.`,
+  ];
+  const randomNumber = Math.floor(Math.random() * outcomes.length);
 
-  if (randomNumber === 0) {
-    message.reply(`
-    🌐 Exploring...
-
-    📦 Found a Loot Crate! 
-    💰 +100 Credits
-    `);
-  }
-
-  if (randomNumber === 1) {
-    message.reply(`
-    🌐 Exploring...
-
-    🤖 Rogue Bot Encountered!
-
-    💰 +150 Credits
-    📈 +25 XP
-    `);
-  }
-
-  if (randomNumber === 2) {
-    message.reply(`
-    🌐 Exploring...
-
-    ❌ Nothing found.
-    `);
-  }
+  message.reply(outcomes[randomNumber])
 };
