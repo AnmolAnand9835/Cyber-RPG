@@ -3,11 +3,11 @@ const player = require("../data/data.player");
 
 module.exports = (message) => {
   const args = message.content.split(" ");
-  const itemName = args[3];
+  const itemName = args[2].toLowerCase();
 
   const item = shop[itemName];
   console.log(message.content)
-  console.log(shop)
+  console.log(itemName)
 
 
   if (!item) {
