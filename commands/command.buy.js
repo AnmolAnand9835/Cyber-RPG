@@ -6,8 +6,6 @@ module.exports = (message) => {
   const itemName = args[2].toLowerCase();
 
   const item = shop[itemName];
-  console.log(message.content)
-  console.log(itemName)
 
 
   if (!item) {
