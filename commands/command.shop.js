@@ -1,10 +1,16 @@
 module.exports = (message) => {
-  message.reply(`
-📡 WiFi Adapter - 💰300
-🔋 Battery Pack - 💰200
-💻 Gaming Laptop - 💰1,000
-🧰 Tool Kit - 💰400
-🛡️ Firewall v1 - 💰500
-🤖 Mini Bot - 💰3,000
-`);
-};
+const shopItem = require('../Data/data.shop')
+  const { EmbedBuilder } = require("discord.js");
+
+const items = Object.values(shopItem)
+  .map((item) => {
+    return `${item.name} - 💰 ${item.price}`;
+  })
+  .join("\n");
+
+ const inventoryEmbed = new EmbedBuilder()
+  .setTitle("🏪 Cyber Shop")
+  .setDescription(items);
+
+message.reply({ embeds: [inventoryEmbed] });
+}

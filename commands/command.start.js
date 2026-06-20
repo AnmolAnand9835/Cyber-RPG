@@ -1,5 +1,6 @@
 module.exports = (message) => {
   message.reply(`
+    [ welcome to Dyno RPG a game for hacker ]
 👤 Operative Created
 ⭐ Level: 1
 📈XP:0
