@@ -1,12 +1,12 @@
 const shop = require("../data/data.shop");
-const player = require("../data/data.player");
+const inventory = require("../Data/data.inventory");
+const player = require("../Data/data.player")
 
 module.exports = (message) => {
   const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
   const item = shop[itemName];
-
 
   if (!item) {
     return message.reply("❌ Item not found.");
@@ -20,7 +20,8 @@ module.exports = (message) => {
 
   player.credits -= item.price;
   player.inventory.push(item.name);
-  console.log(itemName)
+  console.log(player.inventory)
+  
 
   message.reply(
     `✅ Purchased ${item.name}

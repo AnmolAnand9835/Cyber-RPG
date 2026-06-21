@@ -1,11 +1,12 @@
 module.exports = (message) => {
   const { EmbedBuilder } = require("discord.js");
+  const player = require("../Data/data.player");
 
-const Inventory = [
-  "💻 Old Laptop",
-  "📡 WiFi Adapter",
-  "🔋 Battery Pack"
-];
+  const Inventory = player.inventory
+
+  console.log(Inventory);
+  console.log(player)
+  
 
   const inventoryEmbed = new EmbedBuilder()
     .setTitle("🎒 Inventory")

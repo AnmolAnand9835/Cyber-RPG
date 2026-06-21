@@ -28,7 +28,6 @@ client.once("clientReady", () => {
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
 
-  if (message.channel.name !== "dyno-rpg") return;
 
   if (message.content === "sudo start") {
     start(message);
