@@ -10,7 +10,7 @@ module.exports = {
   },
 
   laptop: {
-    name: "💻 Gaming Laptop",
+    name: "💻 Gaming Laptop (write only laptop to buy it)",
     price: 1000,
   },
 
