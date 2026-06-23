@@ -4,8 +4,6 @@ module.exports = (message) => {
 
   const Inventory = player.inventory
 
-  console.log(Inventory);
-  console.log(player)
   
 
   const inventoryEmbed = new EmbedBuilder()

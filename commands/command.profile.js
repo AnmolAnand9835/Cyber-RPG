@@ -10,7 +10,7 @@ module.exports = (message) => {
     .setTitle("👤 Player Profile")
     .setDescription("Welcome to Cyber RPG!")
     .addFields(
-      { name: "⭐ Level", value: "1", inline: true },
+      { name: "⭐ Level", value: player.level.toString(), inline: true },
       { name: "💰 Credits", value: credits, inline: true },
       { name: "📈 XP", value: XP, inline: true },
       { name: "🎒 Inventory", value: inventory.length.toString(), inline:true}

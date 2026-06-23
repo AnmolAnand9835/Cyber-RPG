@@ -11,6 +11,7 @@ const shop = require('./commands/command.shop')
 const daily = require('./commands/command.daily')
 const inventory = require('./commands/command.inventory')
 const buy = require('./commands/command.buy')
+const cash = require('./commands/command.cash')
 
 
 const client = new Client({
@@ -31,6 +32,10 @@ client.on("messageCreate", (message) => {
 
   if (message.content === "sudo start") {
     start(message);
+  }
+
+  if (message.content === "sudo cash"){
+    cash(message)
   }
 
   if (message.content === "sudo profile") {
