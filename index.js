@@ -12,6 +12,7 @@ const daily = require('./commands/command.daily')
 const inventory = require('./commands/command.inventory')
 const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
+const leaderBoard = require('./commands/command.leader')
 
 
 const client = new Client({
@@ -60,6 +61,10 @@ client.on("messageCreate", (message) => {
 
   if (message.content.startsWith("sudo buy")) {
     buy(message);
+  }
+
+  if (message.content === "sudo leaderboard") {
+    leaderBoard(message)
   }
 });
 
