@@ -1,5 +1,9 @@
 require("dotenv").config();
 
+const db = require('./db/connect')
+
+db(process.env.MONGO_URI)
+
 const TOKEN = process.env.YOUR_BOT_TOKEN;
 
 const { Client, GatewayIntentBits } = require("discord.js");
@@ -13,8 +17,6 @@ const inventory = require('./commands/command.inventory')
 const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
 const leaderBoard = require('./commands/command.leader')
-
-const players = require('./Data/data.players')
 
 
 const client = new Client({

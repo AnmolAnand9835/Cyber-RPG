@@ -1,10 +1,12 @@
-const player = require('../Data/data.player')
-const regester = require('../default meassage/msg.regester')
-
-module.exports = (message) =>{
-    if(player[message.author.id]){
-    message.reply(`you have ${player[message.author.id].credits} credits`)
-    }else{
-        regester(message)
-    }
+const Player = require("../models/Player");
+const msg = require("../Data/data.login");
+module.exports = async(message) =>{
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
+  if (!player) {
+    message.reply(msg);
+  }else{
+    message.reply(`<@${message.author.id}> you have ${player.credits} credits`)
+  }
 }

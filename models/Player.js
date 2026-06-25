@@ -1,0 +1,41 @@
+const mongoose = require("mongoose");
+
+const playerSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  credits: {
+    type: Number,
+    default: 500,
+  },
+
+  inventory: {
+    type: [String],
+    default: [`💻 Old Laptop`, `📡 WiFi Adapter`, `🔋 Battery Pack`],
+  },
+
+  xp: {
+    type: Number,
+    default: 0,
+  },
+
+  level: {
+    type: Number,
+    default: 1,
+  },
+
+  lastDaily: {
+    type: Date,
+    default: null,
+  },
+
+  startReward: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+module.exports = mongoose.model("Player", playerSchema);

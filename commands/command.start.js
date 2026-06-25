@@ -1,14 +1,15 @@
-const player = require('../Data/data.players')
-const players = require('../Data/data.player')
+const Player = require("../models/Player");
 
+module.exports = async (message) => {
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
 
-module.exports = (message) => {
-  if(players[message.author.id]){
-    message.reply(`You'r already start the game`)
-  }
-  else{
-  player(message)
-  message.reply(`
+  if (!player) {
+    player = await Player.create({
+      userId: message.author.id,
+    });
+    message.reply(`
     [ welcome to Dyno RPG a game for hacker ]
 👤 Operative Created
 ⭐ Level: 1
@@ -18,6 +19,7 @@ module.exports = (message) => {
 💻 Starter Gear:
 Old Laptop
 `);
+  } else {
+    message.reply(`You'r already start the game`);
   }
 };
-

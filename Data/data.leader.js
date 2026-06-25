@@ -1,5 +1,3 @@
-const { credits, level } = require("./data.player")
-
 module.exports =  [
         {
             position: '1st',

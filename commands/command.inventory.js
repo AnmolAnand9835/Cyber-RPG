@@ -1,13 +1,16 @@
-module.exports = (message) => {
-  const { EmbedBuilder } = require("discord.js");
-  const players = require("../Data/data.player");
-  const regester = require('../default meassage/msg.regester')
+const Player = require("../models/Player");
+const msg = require("../Data/data.login");
+const { EmbedBuilder } = require("discord.js");
 
-  if(players[message.author.id]){
+module.exports = async (message) => {
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
+  if (!player) {
+    message.reply(msg);
+  }else{
 
-  const Inventory = players[message.author.id].inventory
-
-  
+  const Inventory = player.inventory
 
   const inventoryEmbed = new EmbedBuilder()
     .setTitle("🎒 Inventory")
@@ -22,9 +25,6 @@ module.exports = (message) => {
     .setFooter({ text: `Slots: ${Inventory.length}/20` });
 
   message.reply({ embeds: [inventoryEmbed] });
-  }
-  else{
-    regester(message)
   }
 
 };

@@ -1,11 +1,14 @@
-const shop = require("../data/data.shop");
-const players = require("../Data/data.player")
-const regester = require('../default meassage/msg.regester')
-
-module.exports = (message) => {
-  if(players[message.author.id]){
-    const player = players[message.author.id]
-  const args = message.content.split(" ");
+const Player = require("../models/Player");
+const msg = require("../Data/data.login");
+const shop = require('../Data/data.shop')
+module.exports = async(message) =>{
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
+  if (!player) {
+    message.reply(msg);
+  }else{
+      const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
   const item = shop[itemName];
@@ -22,15 +25,15 @@ module.exports = (message) => {
 
   player.credits -= item.price;
   player.inventory.push(item.name);
-  console.log(player.inventory)
   
 
   message.reply(
     `✅ Purchased ${item.name}
 💰 Remaining Credits: ${player.credits}`
   );
+  }
+  await player.save();
 }
-else{
-  regester(message)
-}
-};
+    
+
+

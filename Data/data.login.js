@@ -1,0 +1,1 @@
+module.exports = `Please just use (sudo start) to regester as a user.`

@@ -1,29 +1,31 @@
-const players = require("../Data/data.player");
+const Player = require("../models/Player");
+const msg = require("../Data/data.login");
 
-module.exports = (message) => {
-  if(players[message.author.id]){
-  const now = Date.now();
+module.exports = async (message) => {
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
+  if (!player) {
+    message.reply(msg);
+  } else {
+    const now = Date.now();
 
-  if (player.lastDaily && now - player.lastDaily < 24 * 60 * 60 * 1000) {
-    return message.reply("❌ You already claimed your daily reward.");
-  }
+    if (player.lastDaily && now - player.lastDaily < 24 * 60 * 60 * 1000) {
+      return message.reply("❌ You already claimed your daily reward.");
+    }
 
-  const credits = player.credits;
-  player.credits = credits + 200;
-  player.lastDaily = now
+    const credits = player.credits;
+    player.credits = credits + 200;
+    player.lastDaily = now;
 
-  const XP = player.xp;
-  player.xp = XP + 50;
-  message.reply(`
+    const XP = player.xp;
+    player.xp = XP + 50;
+    message.reply(`
 🎁 Daily Reward
 
 💰 +200 Credits
 📈 +50 XP
 `);
   }
-  else{
-    message.reply(`
-      Please just use (sudo start) to regester as a user.
-      `)
-  }
+  await player.save();
 };
