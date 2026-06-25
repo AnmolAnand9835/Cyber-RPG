@@ -1,8 +1,11 @@
 module.exports = (message) => {
   const { EmbedBuilder } = require("discord.js");
-  const player = require("../Data/data.player");
+  const players = require("../Data/data.player");
+  const regester = require('../default meassage/msg.regester')
 
-  const Inventory = player.inventory
+  if(players[message.author.id]){
+
+  const Inventory = players[message.author.id].inventory
 
   
 
@@ -19,4 +22,9 @@ module.exports = (message) => {
     .setFooter({ text: `Slots: ${Inventory.length}/20` });
 
   message.reply({ embeds: [inventoryEmbed] });
+  }
+  else{
+    regester(message)
+  }
+
 };

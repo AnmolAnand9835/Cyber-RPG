@@ -1,8 +1,10 @@
 const shop = require("../data/data.shop");
-const inventory = require("../Data/data.inventory");
-const player = require("../Data/data.player")
+const players = require("../Data/data.player")
+const regester = require('../default meassage/msg.regester')
 
 module.exports = (message) => {
+  if(players[message.author.id]){
+    const player = players[message.author.id]
   const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
@@ -27,4 +29,8 @@ module.exports = (message) => {
     `✅ Purchased ${item.name}
 💰 Remaining Credits: ${player.credits}`
   );
+}
+else{
+  regester(message)
+}
 };

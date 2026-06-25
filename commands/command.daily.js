@@ -1,6 +1,7 @@
-const player = require("../Data/data.player");
+const players = require("../Data/data.player");
 
 module.exports = (message) => {
+  if(players[message.author.id]){
   const now = Date.now();
 
   if (player.lastDaily && now - player.lastDaily < 24 * 60 * 60 * 1000) {
@@ -19,4 +20,10 @@ module.exports = (message) => {
 💰 +200 Credits
 📈 +50 XP
 `);
+  }
+  else{
+    message.reply(`
+      Please just use (sudo start) to regester as a user.
+      `)
+  }
 };

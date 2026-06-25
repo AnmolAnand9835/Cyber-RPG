@@ -1,6 +1,9 @@
-const player = require('../Data/data.player')
+const players = require('../Data/data.player')
+const regester = require('../default meassage/msg.regester')
 
 module.exports = (message) => {
+  if(players[message.author.id]){
+  const player = players[message.author.id]
   const { EmbedBuilder } = require("discord.js");
   const credits = player.credits.toString()
   const XP = player.xp.toString()
@@ -17,4 +20,8 @@ module.exports = (message) => {
     );
 
   message.reply({ embeds: [profileEmbed]});
+  }
+  else{
+    regester(message)
+  }
 };

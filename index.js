@@ -14,6 +14,8 @@ const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
 const leaderBoard = require('./commands/command.leader')
 
+const players = require('./Data/data.players')
+
 
 const client = new Client({
   intents: [
