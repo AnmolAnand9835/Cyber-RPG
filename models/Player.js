@@ -36,6 +36,11 @@ const playerSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  lastExplore: {
+  type: Date,
+  default: null,
+},
 });
 
 module.exports = mongoose.model("Player", playerSchema);
