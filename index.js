@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const db = require('./db/connect')
 
 db(process.env.MONGO_URI)
@@ -17,6 +16,7 @@ const inventory = require('./commands/command.inventory')
 const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
 const leaderBoard = require('./commands/command.leader')
+const help = require('./commands/command.help')        
 
 
 const client = new Client({
@@ -37,6 +37,10 @@ client.on("messageCreate", (message) => {
 
   if (message.content === "sudo start") {
     start(message);
+  }
+
+  if(message.content === "sudo help"){
+    help(message);
   }
 
   if (message.content === "sudo cash"){
