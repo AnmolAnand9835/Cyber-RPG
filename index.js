@@ -3,6 +3,9 @@ const db = require('./db/connect')
 
 db(process.env.MONGO_URI)
 
+const express = request("express")
+const app = express()
+
 const TOKEN = process.env.YOUR_BOT_TOKEN;
 
 const { Client, GatewayIntentBits } = require("discord.js");
@@ -16,7 +19,8 @@ const inventory = require('./commands/command.inventory')
 const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
 const leaderBoard = require('./commands/command.leader')
-const help = require('./commands/command.help')        
+const help = require('./commands/command.help');        
+const { request } = require("express");
 
 
 const client = new Client({
@@ -77,3 +81,9 @@ client.on("messageCreate", (message) => {
 });
 
 client.login(TOKEN);
+
+app.use(express.json());
+
+app.use("/api/stats", require("./routes/route.profile"));
+
+app.listen(process.env.PORT);
