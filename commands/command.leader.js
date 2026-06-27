@@ -1,18 +1,27 @@
-const leaders = require("../Data/data.leader");
+const Player = require("../models/Player");
 
-module.exports = (message) => {
-  const { EmbedBuilder } = require("discord.js");
+module.exports = async (message) => {
+  const players = await Player.find()
+    .sort({ credits: -1 }) // Highest credits first
+    .limit(10);
 
-  const leaderBoardEmbed = new EmbedBuilder().setTitle("leaderboard");
+  if (players.length === 0) {
+    return message.reply("📭 No players found.");
+  }
 
-  const text = leaders
-    .map(
-      (item) =>
-        `The ${item.position} is ${item.name} credits: ${item.credits} level: ${item.level}`,
-    )
-    .join("\n");
+const medals = ["🥇", "🥈", "🥉"];
 
-  leaderBoardEmbed.setDescription(text);
+const leaderboard = players
+  .map((player, index) => {
+    const rank = medals[index] || `#${index + 1}`;
 
-  message.reply({ embeds: [leaderBoardEmbed] });
+    return `${rank} ${player.username || "Unknown"}
+💰 ${player.credits} Credits | ⭐ Level ${player.level}`;
+  })
+  .join("\n\n");
+
+  message.reply(
+    `🏆 **Cyber RPG Leaderboard**\n\n${leaderboard}`
+  );
 };
+

@@ -9,8 +9,8 @@ module.exports = {
     price: 200,
   },
 
-  laptop: {
-    name: "💻 Laptop",
+  aminglaptop: {
+    name: "💻 GamingLaptop",
     price: 1000,
   },
 

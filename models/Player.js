@@ -7,6 +7,12 @@ const playerSchema = new mongoose.Schema({
     unique: true,
   },
 
+  username: {
+    type: String,
+    require: true,
+    unique:true
+  },
+
   credits: {
     type: Number,
     default: 500,
