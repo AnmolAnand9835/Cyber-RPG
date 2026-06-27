@@ -1,11 +1,17 @@
 const Player = require("../models/Player");
 
-const getPlayer = async(req, res) =>{
-    
-    const player = await Player.findOne({
+const getPlayer = async (req, res) => {
+  const player = await Player.findOne({
     userId: req.params.id,
-  })
-    return res.json(player);
-}
+  });
 
-module.exports = getPlayer
+  if (!player) {
+    return res.status(404).json({
+      message: "Player not found",
+    });
+  }
+
+  return res.json(player);
+};
+
+module.exports = getPlayer;
