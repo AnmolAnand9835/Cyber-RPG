@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 
+module.exports = (message) => {
 const helpEmbed = new EmbedBuilder()
   .setTitle("🤖 Welcome to Cyber RPG")
   .setDescription(
@@ -32,3 +33,4 @@ const helpEmbed = new EmbedBuilder()
   });
 
 message.reply({ embeds: [helpEmbed] });
+}

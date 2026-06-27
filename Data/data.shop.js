@@ -1,71 +1,61 @@
 module.exports = {
   wifi: {
-    name: "📡 WiFi Adapter",
+    name: "📡 WiFi",
     price: 300,
   },
 
   battery: {
-    name: "🔋 Battery Pack",
+    name: "🔋 Battery",
     price: 200,
   },
 
   laptop: {
-    name: "💻 Gaming Laptop (write only laptop to buy it)",
+    name: "💻 Laptop",
     price: 1000,
   },
 
   minibot: {
-    name: "🤖 Mini Bot",
+    name: "🤖 Minibot",
     price: 3000,
   },
 
   keyboard: {
-    name: "⌨️ Mechanical Keyboard",
+    name: "⌨️ Keyboard",
     price: 500,
   },
 
   monitor: {
-    name: "🖥️ Gaming Monitor",
+    name: "🖥️ Monitor",
     price: 800,
   },
 
   gpu: {
-    name: "🎮 Graphics Card",
+    name: "🎮 GPU",
     price: 5000,
   },
 
   server: {
-    name: "🗄️ Home Server",
+    name: "🗄️ Server",
     price: 10000,
   },
 
   drone: {
-    name: "🚁 Surveillance Drone",
+    name: "🚁 Drone",
     price: 8000,
   },
 
   toolkit: {
-    name: "🧰 Hacker Toolkit",
+    name: "🧰 Toolkit",
     price: 2500,
   },
 
-  aiassistant: {
-    name: "🧠 AI Assistant",
-    price: 15000,
-  },
-
-  datacenter: {
-    name: "🏢 Mini Datacenter",
-    price: 50000,
-  },
-
   satellite: {
-    name: "🛰️ Satellite Link",
+    name: "🛰️ Satellite",
     price: 100000,
   },
 
-  quantumpc: {
-    name: "⚛️ Quantum Computer",
+  quantum: {
+    name: "⚛️ Quantum",
     price: 500000,
   },
 };
