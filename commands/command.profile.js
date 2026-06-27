@@ -19,7 +19,7 @@ module.exports = async (message) => {
       .addFields(
         { name: "⭐ Level", value: player.level.toString(), inline: true },
         { name: "💰 Credits", value: credits, inline: true },
-        { name: "📈 XP", value: XP/xpNeeded, inline: true },
+        { name: "📈 XP", value: `${XP}/${xpNeeded}`, inline: true },
         {
           name: "🎒 Inventory",
           value: inventory.length.toString(),
