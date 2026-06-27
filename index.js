@@ -3,7 +3,7 @@ const db = require('./db/connect')
 
 db(process.env.MONGO_URI)
 
-const express = request("express")
+const express = require("express")
 const app = express()
 
 const TOKEN = process.env.YOUR_BOT_TOKEN;
