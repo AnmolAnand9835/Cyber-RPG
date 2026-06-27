@@ -142,16 +142,18 @@ module.exports = async (message) => {
 
     player.xp += event.xp;
 
-    const xpNeeded = player.level * 100;
+    player.xp += event.xp;
 
-    if (player.xp >= xpNeeded) {
-      player.xp -= xpNeeded;
-      player.level += 1;
+    while (player.xp >= player.level * 100) {
+      player.xp -= player.level * 100;
+      player.level++;
 
-      message.reply(
-        `🎉 ${message.author} leveled up to Level ${player.level}!`,
+      message.channel.send(
+        `🎉 ${message.author} reached Level ${player.level}!`,
       );
     }
+
+    await player.save();
 
     await player.save();
 
