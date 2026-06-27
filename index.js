@@ -84,6 +84,9 @@ client.login(TOKEN);
 
 app.use(express.json());
 
-app.use("/api/stats", require("./routes/route.profile"));
+app.use("/api/stats", require("./routes/route.stats"));
+app.use("/api/players", require("./routes/route.players"));
+app.use("/api/player", require("./routes/route.player"));
+app.use("/api/shop", require("./routes/route.shop"))
 
 app.listen(process.env.PORT);
