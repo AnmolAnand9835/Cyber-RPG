@@ -12,13 +12,14 @@ module.exports = async (message) => {
     const credits = player.credits.toString();
     const XP = player.xp.toString();
     const inventory = player.inventory;
+    const xpNeeded = player.xpNeeded
 
     const profileEmbed = new EmbedBuilder()
       .setTitle(`👤 ${message.author.displayName} Profile`)
       .addFields(
         { name: "⭐ Level", value: player.level.toString(), inline: true },
         { name: "💰 Credits", value: credits, inline: true },
-        { name: "📈 XP", value: XP, inline: true },
+        { name: "📈 XP", value: XP/xpNeeded, inline: true },
         {
           name: "🎒 Inventory",
           value: inventory.length.toString(),

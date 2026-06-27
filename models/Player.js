@@ -10,7 +10,7 @@ const playerSchema = new mongoose.Schema({
   username: {
     type: String,
     require: true,
-    unique:true
+    unique: true,
   },
 
   credits: {
@@ -26,6 +26,11 @@ const playerSchema = new mongoose.Schema({
   xp: {
     type: Number,
     default: 0,
+  },
+
+  xpNeeded: {
+    type: Number,
+    default: 100,
   },
 
   level: {
@@ -44,9 +49,9 @@ const playerSchema = new mongoose.Schema({
   },
 
   lastExplore: {
-  type: Date,
-  default: null,
-},
+    type: Date,
+    default: null,
+  },
 });
 
 module.exports = mongoose.model("Player", playerSchema);

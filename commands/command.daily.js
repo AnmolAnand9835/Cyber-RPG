@@ -24,7 +24,8 @@ module.exports = async (message) => {
     player.xp += event.xp;
 
     while (player.xp >= player.level * 100) {
-      player.xp -= player.level * 100;
+      player.xpNeeded = player.level * 100
+      player.xp -= player.xpNeeded
       player.level++;
 
       message.channel.send(
