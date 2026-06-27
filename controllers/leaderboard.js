@@ -11,11 +11,12 @@ module.exports = async (req, res) => {
     });
   }
 
+const leaderboard = players.map((player, index) => ({
+    rank: index + 1,
+    username: player.username || "Unknown",
+    credits: player.credits,
+    level: player.level,
+}));
 
-const leaderboard = players
-
-    return res.json({
-        message: `${rank} ${player.username || "Unknown"}
-💰 ${player.credits} Credits | ⭐ Level ${player.level}`})
-
-}
+return res.json(leaderboard)
+};
