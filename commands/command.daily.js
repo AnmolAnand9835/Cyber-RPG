@@ -20,6 +20,21 @@ module.exports = async (message) => {
 
     const XP = player.xp;
     player.xp = XP + 50;
+
+    player.xp += event.xp;
+
+    const xpNeeded = player.level * 100;
+
+    if (player.xp >= xpNeeded) {
+      player.xp -= xpNeeded;
+      player.level += 1;
+
+      message.reply(
+        `🎉 ${message.author} leveled up to Level ${player.level}!`,
+      );
+    }
+
+    await player.save();
     message.reply(`
 🎁 Daily Reward
 
