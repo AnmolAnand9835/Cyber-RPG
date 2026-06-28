@@ -21,7 +21,6 @@ module.exports = async (message) => {
     const XP = player.xp;
     player.xp = XP + 50;
 
-    player.xp += event.xp;
 
     while (player.xp >= player.level * 100) {
       player.xpNeeded = player.level * 100
