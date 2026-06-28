@@ -9,9 +9,19 @@ module.exports = async (message) => {
     message.reply(msg);
   } else {
     const now = Date.now();
+    lastDaily = Date.parse(player.lastDaily);
+    const COOLDOWN = 24 * 60 * 60 * 1000;
 
-    if (player.lastDaily && now - player.lastDaily < 24 * 60 * 60 * 1000) {
-      return message.reply("❌ You already claimed your daily reward.");
+    const remaining = COOLDOWN - (now - lastDaily);
+
+    if (remaining > 0) {
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+      const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+      return message.reply(
+        `❌ You already claimed your daily reward.\nCome back in ${hours}h ${minutes}m ${seconds}s.`,
+      );
     }
 
     const credits = player.credits;
@@ -21,10 +31,9 @@ module.exports = async (message) => {
     const XP = player.xp;
     player.xp = XP + 50;
 
-
     while (player.xp >= player.level * 100) {
-      player.xpNeeded = player.level * 100
-      player.xp -= player.xpNeeded
+      player.xpNeeded = player.level * 100;
+      player.xp -= player.xpNeeded;
       player.level++;
 
       message.channel.send(
