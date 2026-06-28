@@ -33,9 +33,6 @@ module.exports = async (message) => {
       );
     }
 
-    await player.save();
-
-    await player.save();
     message.reply(`
 🎁 Daily Reward
 
