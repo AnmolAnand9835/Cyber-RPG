@@ -1,6 +1,6 @@
 const Player = require('../models/Player')
 
-module.exports = (message) => {
+module.exports = async(message) => {
     const username = message.author.username;
 const avatar = message.author.displayAvatarURL({
   extension: "png",
