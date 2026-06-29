@@ -20,7 +20,7 @@ const buy = require('./commands/command.buy')
 const cash = require('./commands/command.cash')
 const leaderBoard = require('./commands/command.leader')
 const help = require('./commands/command.help');        
-const { request } = require("express");
+const update = require('./middelware/Update')
 
 
 const client = new Client({
@@ -74,6 +74,8 @@ client.on("messageCreate", (message) => {
   if (message.content.startsWith("sudo buy")) {
     buy(message);
   }
+
+  if (message.content.startsWith("sudo"))
 
   if (message.content === "sudo leaderboard") {
     leaderBoard(message)

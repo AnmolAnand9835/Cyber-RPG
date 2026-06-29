@@ -10,9 +10,9 @@ module.exports = async (message) => {
       userId: message.author.id,
       username: message.author.username,
       avatar: message.author.displayAvatarURL({
-  extension: "png",
-  size: 512,
-})
+        extension: "png",
+        size: 512,
+      }),
     });
     message.reply(`
     [ welcome to Dyno RPG a game for hacker ]

@@ -6,7 +6,7 @@ module.exports = async (message) => {
     userId: message.author.id,
   });
   if (!player) {
-    message.reply(msg);
+    message.reply(msg); 
   } else {
     const { EmbedBuilder } = require("discord.js");
     const credits = player.credits.toString();
