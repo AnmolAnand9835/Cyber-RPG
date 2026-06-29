@@ -8,7 +8,11 @@ module.exports = async (message) => {
   if (!player) {
     player = await Player.create({
       userId: message.author.id,
-      username: message.author.username
+      username: message.author.username,
+      avatar: message.author.displayAvatarURL({
+  extension: "png",
+  size: 512,
+})
     });
     message.reply(`
     [ welcome to Dyno RPG a game for hacker ]

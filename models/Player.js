@@ -1,6 +1,12 @@
 const mongoose = require("mongoose");
 
 const playerSchema = new mongoose.Schema({
+  avatar:{
+    type: String,
+    require: true,
+    unique:true,
+  },
+
   userId: {
     type: String,
     required: true,
