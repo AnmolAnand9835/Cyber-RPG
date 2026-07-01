@@ -4,7 +4,7 @@ const shopItem = require('../Data/data.shop')
 
 const items = Object.values(shopItem)
   .map((item) => {
-    return `${item.emoji}${item.name} - 💰 ${item.price}`;
+    return `${item.emoji} ${item.name} - 💰 ${item.price}`;
   })
   .join("\n");
 
