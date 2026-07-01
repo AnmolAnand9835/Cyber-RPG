@@ -86,6 +86,15 @@ client.login(TOKEN);
 
 app.use(express.json());
 
+const cors = require("cors");
+
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://your-frontend.vercel.app"
+    ],
+    credentials: true
+}));
 app.use("/api/stats", require("./routes/route.stats"));
 app.use("/api/players", require("./routes/route.players"));
 app.use("/api/player", require("./routes/route.player"));
