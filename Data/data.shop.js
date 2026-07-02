@@ -1,85 +1,86 @@
-module.exports = {
-  wifi: {
+module.exports = [
+  {
+    id: "wifi",
     name: "WiFi",
     emoji: "📡",
     icon: "Wifi",
     price: 300,
   },
-
-  battery: {
+  {
+    id: "battery",
     name: "Battery",
     emoji: "🔋",
     icon: "Battery",
     price: 200,
   },
-
-  gaminglaptop: {
+  {
+    id: "gaminglaptop",
     name: "Gaming Laptop",
     emoji: "💻",
     icon: "Laptop",
     price: 1000,
   },
-
-  minibot: {
+  {
+    id: "minibot",
     name: "Mini Bot",
     emoji: "🤖",
     icon: "Bot",
     price: 3000,
   },
-
-  keyboard: {
+  {
+    id: "keyboard",
     name: "Keyboard",
     emoji: "⌨️",
     icon: "Keyboard",
     price: 500,
   },
-
-  monitor: {
+  {
+    id: "monitor",
     name: "Monitor",
     emoji: "🖥️",
     icon: "Monitor",
     price: 800,
   },
-
-  gpu: {
+  {
+    id: "gpu",
     name: "GPU",
     emoji: "🎮",
     icon: "Cpu",
     price: 5000,
   },
-
-  server: {
+  {
+    id: "server",
     name: "Server",
     emoji: "🗄️",
     icon: "Server",
     price: 10000,
   },
-
-  drone: {
+  {
+    id: "drone",
     name: "Drone",
     emoji: "🚁",
     icon: "Plane",
     price: 8000,
   },
-
-  toolkit: {
+  {
+    id: "toolkit",
     name: "Toolkit",
     emoji: "🧰",
     icon: "Hammer",
     price: 2500,
   },
-
-  satellite: {
+  {
+    id: "satellite",
     name: "Satellite",
     emoji: "🛰️",
     icon: "Satellite",
     price: 100000,
   },
-
-  quantum: {
+  {
+    id: "quantum",
     name: "Quantum Computer",
     emoji: "⚛️",
     icon: "Atom",
     price: 500000,
   },
-};
+];
