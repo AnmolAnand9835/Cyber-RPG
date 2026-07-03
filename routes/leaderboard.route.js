@@ -1,4 +1,4 @@
-const leaderboard = require("../controllers/leaderboard")
+const leaderboard = require("../controllers/leaderboard.controller")
 const router = require("express").Router();
 
 router.get("/", leaderboard);

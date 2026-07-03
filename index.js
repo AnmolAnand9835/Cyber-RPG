@@ -95,10 +95,10 @@ app.use(cors({
     ],
     credentials: true
 }));
-app.use("/api/stats", require("./routes/route.stats"));
-app.use("/api/players", require("./routes/route.players"));
-app.use("/api/player", require("./routes/route.player"));
-app.use("/api/shop", require("./routes/route.shop"));
-app.use("/api/leaderboard", require("./routes/route.leaderboard"))
+app.use("/api/stats", require("./routes/stats.route"));
+app.use("/api/players", require("./routes/players.route"));
+app.use("/api/player", require("./routes/player.route"));
+app.use("/api/shop", require("./routes/shop.route"));
+app.use("/api/leaderboard", require("./routes/leaderboard.route"))
 
 app.listen(process.env.PORT);
