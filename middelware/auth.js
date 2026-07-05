@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 
@@ -21,7 +20,9 @@ router.get("/auth/discord", async (req, res) => {
     scope: [Scopes.Identify],
   });
 
-  res.redirect("https://discord.com/oauth2/authorize?client_id=1516643856022507580&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&scope=identify");
+  res.redirect(
+    "https://discord.com/oauth2/authorize?client_id=1516643856022507580&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fdiscord%2Fcallback&scope=identify",
+  );
 });
 
 // Callback
@@ -30,9 +31,7 @@ router.get("/auth/discord/callback", async (req, res) => {
 
   const token = await oauth2.GetAccessToken(code);
 
-  const user = await oauth2.UserDataSchema.GetUserProfile(
-    token.accessToken
-  );
+  const user = await oauth2.UserDataSchema.GetUserProfile(token.accessToken);
 
   console.log(user);
 
