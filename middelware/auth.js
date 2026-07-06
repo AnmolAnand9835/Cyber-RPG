@@ -30,8 +30,8 @@ router.get("/auth/discord", async (req, res) => {
 
           res.send(`you sucessfull login click on this link <a href="http://localhost:5173">Visit Google</a>`);
 
-          oauth2.UserDataSchema.GetUserProfile(result2.accessToken).then((result) => {
-            console.log(result);
+          oauth2.UserDataSchema.GetUserProfile(result2.accessToken).then((result3) => {
+            console.log(result3);
           });
         });
     });
