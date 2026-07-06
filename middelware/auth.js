@@ -39,7 +39,7 @@ router.get("/auth/discord/callback", async (req, res) => {
     const jwt_token = jwt.sign(
   {
     userId: user._id,
-    discordId: user.username,
+    discordId: user.id,
   },
   process.env.JWT_SECRET,
   {
