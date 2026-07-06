@@ -16,13 +16,16 @@ const oauth2 = new DiscordOAuth2({
 
 // Login route
 router.get("/auth/discord", async (req, res) => {
-  const url = await oauth2
+  oauth2
     .GenerateOAuth2Url({
       state: StateTypes.UserAuth,
       scope: [Scopes.Identify],
     })
     .then((result) => {
       console.log(result);
+
+      const url = result.url
+
       router.get("/auth/discord/callback", (req, res) => {
         const { code } = req.query;
         console.log(code);
@@ -44,10 +47,8 @@ router.get("/auth/discord", async (req, res) => {
             );
           });
       });
-      console.log(url.url)
-      res.redirect(
-        url.url
-      );
+      console.log(url);
+      res.redirect(url);
 
       console.log(user);
 
