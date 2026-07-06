@@ -18,29 +18,31 @@ const oauth2 = new DiscordOAuth2({
 
 // Login route
 router.get("/auth/discord", async (req, res) => {
-    const result = await oauth2.GenerateOAuth2Url({
-        state: StateTypes.UserAuth,
-        scope: [Scopes.Identify],
-    });
+  const result = await oauth2.GenerateOAuth2Url({
+    state: StateTypes.UserAuth,
+    scope: [Scopes.Identify],
+  });
 
-    res.redirect(result.url);
+  res.redirect(result.url);
 });
 
 router.get("/auth/discord/callback", async (req, res) => {
+  const { code } = req.query;
 
-    const { code } = req.query;
+  const token = await oauth2.GetAccessToken(code);
 
-    const token = await oauth2.GetAccessToken(code);
+  const user = await oauth2.UserDataSchema.GetUserProfile(token.accessToken);
 
-    const user = await oauth2.UserDataSchema.GetUserProfile(
-        token.accessToken
-    );
+  const jwt_token = genrateToken(user);
 
-    const jwt_token = genrateToken(user);
+  res.cookie("token", jwtToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
 
-    auth()
-
-    res.send("Login successful");
+  res.send("Login successful");
 });
 
 module.exports = router;
