@@ -23,6 +23,8 @@ router.get("/auth/discord", async (req, res) => {
     console.log(result);
     router.get("/auth/discord/callback", (req, res) => {
       const { code } = req.query;
+      console.log(code);
+      
       if (code) {
         oauth2.GetAccessToken(code).then((result2) => {
           console.log("Access Token", result2);
