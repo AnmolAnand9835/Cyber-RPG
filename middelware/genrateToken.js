@@ -11,4 +11,5 @@ const jwt_token = jwt.sign(
     expiresIn: "7d",
   },
 );
+const token = req.cookies.token
 }

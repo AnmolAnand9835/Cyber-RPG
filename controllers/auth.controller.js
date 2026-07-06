@@ -36,9 +36,9 @@ router.get("/auth/discord/callback", async (req, res) => {
         token.accessToken
     );
 
-    const jwt_token = auth(user);
+    const jwt_token = genrateToken(user);
 
-    auth(jwt_token)
+    auth()
 
     res.send("Login successful");
 });
