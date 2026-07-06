@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 const {
   DiscordOAuth2,
@@ -35,6 +36,19 @@ router.get("/auth/discord/callback", async (req, res) => {
     );
 
     console.log(user);
+
+    const jwt_token = jwt.sign(
+  {
+    userId: user._id,
+    discordId: user.username,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
+
+console.log(jwt_token)
 
     res.send("Login successful");
 });
