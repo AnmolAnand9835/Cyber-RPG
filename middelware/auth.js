@@ -17,4 +17,4 @@ module.exports = (req, res, next) => {
       message: "Invalid token",
     });
   }
-};x
+};
