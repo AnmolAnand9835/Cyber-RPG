@@ -47,12 +47,7 @@ router.get("/auth/discord", async (req, res) => {
             );
           });
       });
-      console.log(url);
       res.redirect(url);
-
-      console.log(user);
-
-      res.send("Login successful");
     });
 });
 
