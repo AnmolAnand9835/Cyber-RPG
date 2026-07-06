@@ -28,11 +28,7 @@ router.get("/auth/discord/callback", async (req, res) => {
 
     const { code } = req.query;
 
-    console.log(code)
-
     const token = await oauth2.GetAccessToken(code);
-
-    console.log(token);
 
     const user = await oauth2.UserDataSchema.GetUserProfile(
         token.accessToken
