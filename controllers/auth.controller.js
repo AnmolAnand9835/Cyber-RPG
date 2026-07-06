@@ -35,7 +35,7 @@ router.get("/auth/discord/callback", async (req, res) => {
 
   const jwt_token = genrateToken(user);
 
-  res.cookie("token", jwtToken, {
+  res.cookie("token", jwt_token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
