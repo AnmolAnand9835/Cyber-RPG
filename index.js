@@ -5,6 +5,7 @@ db(process.env.MONGO_URI);
 
 const express = require("express");
 const app = express();
+const cookie = require('cookie-parser')
 
 const TOKEN = process.env.YOUR_BOT_TOKEN;
 
@@ -91,12 +92,13 @@ app.use(
     credentials: true,
   }),
 );
+app.use(cookie())
 app.use("/api/stats", require("./routes/stats.route"));
 app.use("/api/players", require("./routes/players.route"));
 app.use("/api/player", require("./routes/player.route"));
 app.use("/api/shop", require("./routes/shop.route"));
 app.use("/api/leaderboard", require("./routes/leaderboard.route"));
 app.use("/api/auth", require("./routes/auth.route"));
-app.use(require("./middelware/auth"));
+app.use(require("./controllers/auth.controller"));
 
 app.listen(process.env.PORT);

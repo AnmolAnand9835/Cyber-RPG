@@ -1,55 +1,20 @@
-const express = require("express");
-const router = express.Router();
 const jwt = require("jsonwebtoken");
 
-const {
-  DiscordOAuth2,
-  StateTypes,
-  Scopes,
-} = require("@mgalacyber/discord-oauth2");
-const { Routes } = require("discord.js");
+module.exports = (req, res, next) => {
+  const token = req.cookies.token;
 
-const oauth2 = new DiscordOAuth2({
-  clientId: process.env.DISCORD_CLIENT_ID,
-  clientSecret: process.env.DISCORD_CLIENT_SECRET,
-  redirectUri: process.env.DISCORD_REDIRECT_URI,
-});
-
-// Login route
-router.get("/auth/discord", async (req, res) => {
-    const result = await oauth2.GenerateOAuth2Url({
-        state: StateTypes.UserAuth,
-        scope: [Scopes.Identify],
+  if (!token) {
+    return res.status(401).json({
+      message: "Unauthorized",
     });
-
-    res.redirect(result.url);
-});
-
-router.get("/auth/discord/callback", async (req, res) => {
-
-    const { code } = req.query;
-
-    const token = await oauth2.GetAccessToken(code);
-
-    const user = await oauth2.UserDataSchema.GetUserProfile(
-        token.accessToken
-    );
-
-
-    const jwt_token = jwt.sign(
-  {
-    userId: user._id,
-    discordId: user.id,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: "7d",
   }
-);
 
-console.log(jwt_token)
-
-    res.send("Login successful");
-});
-
-module.exports = router;
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch {
+    return res.status(401).json({
+      message: "Invalid token",
+    });
+  }
+};x
