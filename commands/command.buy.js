@@ -11,7 +11,8 @@ module.exports = async(message) =>{
       const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
-  const item = shop[itemName];
+  const item = shop.find((element) => element.id === itemName);
+
 
   if (!item) {
     return message.reply("❌ Item not found.");
