@@ -26,7 +26,7 @@ router.get("/auth/discord", async (req, res) => {
 
       const url = result.url
 
-      router.post("/auth/discord/callback", (req, res) => {
+      router.get("/auth/discord/callback", (req, res) => {
         const { code } = req.query;
         console.log(code);
 
