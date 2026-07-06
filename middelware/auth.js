@@ -25,7 +25,6 @@ router.get("/auth/discord", async (req, res) => {
       const { code } = req.query;
       console.log(code);
       
-      if (code) {
         oauth2.GetAccessToken(code).then((result2) => {
           console.log("Access Token", result2);
 
@@ -35,13 +34,12 @@ router.get("/auth/discord", async (req, res) => {
             console.log(result);
           });
         });
-      }
-      else{
-        console.log('error');
-        
-      }
     });
     res.redirect("https://discord.com/oauth2/authorize?client_id=1516643856022507580&response_type=code&redirect_uri=https%3A%2F%2Fcyber-rpg-production.up.railway.app%2Fauth%2Fdiscord%2Fcallback&scope=identify");
+
+      console.log(user);
+
+  res.send("Login successful");
   });
 }) 
 
