@@ -44,6 +44,7 @@ router.get("/auth/discord", async (req, res) => {
             );
           });
       });
+      console.log(url)
       res.redirect(
         url.url
       );
