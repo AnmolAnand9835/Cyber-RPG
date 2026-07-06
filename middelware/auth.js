@@ -39,7 +39,7 @@ router.get("/auth/discord", async (req, res) => {
         
       }
     });
-    res.redirect(result.url);
+    res.redirect("https://discord.com/oauth2/authorize?client_id=1516643856022507580&response_type=code&redirect_uri=https%3A%2F%2Fcyber-rpg-production.up.railway.app%2Fauth%2Fdiscord%2Fcallback&scope=identify");
   });
 }) 
 
