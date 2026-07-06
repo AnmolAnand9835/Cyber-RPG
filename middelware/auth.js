@@ -6,6 +6,7 @@ const {
   StateTypes,
   Scopes,
 } = require("@mgalacyber/discord-oauth2");
+const { Routes } = require("discord.js");
 
 const oauth2 = new DiscordOAuth2({
   clientId: process.env.DISCORD_CLIENT_ID,
@@ -18,24 +19,41 @@ router.get("/auth/discord", async (req, res) => {
   const url = await oauth2.GenerateOAuth2Url({
     state: StateTypes.UserAuth,
     scope: [Scopes.Identify],
-  });
+  }).then((result) => {
+    console.log(result);
+    router.get("/auth/discord/callback", (req, res) => {
+      const { code } = req.query;
+      if (code) {
+        oauth2.GetAccessToken(code).then((result2) => {
+          console.log("Access Token", result2);
 
-  res.redirect(
-    "https://discord.com/oauth2/authorize?client_id=1516643856022507580&response_type=code&redirect_uri=https%3A%2F%2Fcyber-rpg-production.up.railway.app%2Fauth%2Fdiscord%2Fcallback&scope=identify",
-  );
-});
+          res.send(`you sucessfull login click on this link <a href="http://localhost:5173">Visit Google</a>`);
+
+          oauth2.UserDataSchema.GetUserProfile(result2.accessToken).then((result) => {
+            console.log(result);
+          });
+        });
+      }
+      else{
+        console.log('error');
+        
+      }
+    });
+    res.redirect(result.url);
+  });
+}) 
 
 // Callback
-router.get("/auth/discord/callback", async(req, res) => {
-  const { code } = req.query;
+// router.get("/auth/discord/callback", async(req, res) => {
+//   const { code } = req.query;
 
-  const token = await oauth2.GetAccessToken(code);
+//   const token = await oauth2.GetAccessToken(code);
 
-  const user = await oauth2.UserDataSchema.GetUserProfile(token.accessToken);
+//   const user = await oauth2.UserDataSchema.GetUserProfile(token.accessToken);
 
-  console.log(user);
+//   console.log(user);
 
-  res.send("Login successful");
-});
+//   res.send("Login successful");
+// });
 
 module.exports = router;
