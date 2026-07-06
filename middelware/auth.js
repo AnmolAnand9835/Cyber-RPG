@@ -35,7 +35,6 @@ router.get("/auth/discord/callback", async (req, res) => {
         token.accessToken
     );
 
-    console.log(user);
 
     const jwt_token = jwt.sign(
   {
