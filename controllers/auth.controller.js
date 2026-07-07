@@ -33,7 +33,7 @@ router.get("/auth/discord/callback", async (req, res) => {
 
   const user = await oauth2.UserDataSchema.GetUserProfile(token.accessToken);
 
-  const jwt_token = genrateToken(user);
+  const jwtToken = genrateToken(user);
 
 res.cookie("token", jwtToken, {
   httpOnly: true,
