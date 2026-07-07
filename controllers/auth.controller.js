@@ -37,6 +37,8 @@ router.get("/auth/discord/callback", async (req, res) => {
 
   res.cookie("token", jwt_token);
 
+  auth()
+
   res.send("Login successful");
 });
 
