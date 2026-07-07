@@ -92,7 +92,7 @@ app.use(
     credentials: true,
   }),
 );
-c
+
 app.use("/api/stats", require("./routes/stats.route"));
 app.use("/api/players", require("./routes/players.route"));
 app.use("/api/player", require("./routes/player.route"));
