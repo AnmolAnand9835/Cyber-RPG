@@ -44,8 +44,6 @@ router.get("/auth/discord/callback", async (req, res) => {
 
 
 res.redirect("http://localhost:5173/dashboard");
-
-  res.send("Login successful");
 });
 
 module.exports = router;
