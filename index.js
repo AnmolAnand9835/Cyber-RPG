@@ -102,4 +102,6 @@ app.use("/api/auth", require("./routes/auth.route"));
 app.use("/",require("./routes/me.route"))
 app.use(require("./controllers/auth.controller"));
 
+app.use(cookie());
+
 app.listen(process.env.PORT);
