@@ -99,6 +99,7 @@ app.use("/api/player", require("./routes/player.route"));
 app.use("/api/shop", require("./routes/shop.route"));
 app.use("/api/leaderboard", require("./routes/leaderboard.route"));
 app.use("/api/auth", require("./routes/auth.route"));
+app.use("/",require("./routes/me.route"))
 app.use(require("./controllers/auth.controller"));
 
 app.listen(process.env.PORT);
