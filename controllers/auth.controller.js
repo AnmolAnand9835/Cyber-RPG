@@ -42,7 +42,7 @@ res.cookie("token", jwtToken, {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
-res.redirect("http://localhost:5173/dashboard");
+res.redirect("http://localhost:5173");
 });
 
 module.exports = router;
