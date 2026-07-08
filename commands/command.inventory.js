@@ -8,24 +8,21 @@ module.exports = async (message) => {
   });
   if (!player) {
     message.reply(msg);
-  }else{
+  } else {
+    const Inventory = player.inventory;
 
-  const Inventory = player.inventory
+    const inventoryEmbed = new EmbedBuilder()
+      .setTitle("🎒 Inventory")
+      .setDescription("This is the place where you see what you have.")
+      .addFields(
+        Inventory.map((item) => ({
+          name: `${item.emoji} ${item.name}`,
+          value: "Owned",
+          inline: true,
+        })),
+      )
+      .setFooter({ text: `Slots: ${Inventory.length}/20` });
 
-  const inventoryEmbed = new EmbedBuilder()
-    .setTitle("🎒 Inventory")
-    .setDescription("This is the place where you see what you have.")
-    .addFields(
-    Inventory.map((item) => ({
-      emoji: item.emoji,
-      name: item.name,
-      value: "Owned",
-      inline: true,
-    }))
-    )
-    .setFooter({ text: `Slots: ${Inventory.length}/20` });
-
-  message.reply({ embeds: [inventoryEmbed] });
+    message.reply({ embeds: [inventoryEmbed] });
   }
-
 };
