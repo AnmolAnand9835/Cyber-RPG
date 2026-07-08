@@ -1,4 +1,4 @@
-const Player = require('../models/Player')
+const player = require('../models/Player')
 
 module.exports = async(message) => {
     const username = message.author.username;
