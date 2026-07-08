@@ -2,7 +2,7 @@ const Player = require("../models/Player");
 
 const getPlayer = async (req, res) => {
   const player = await Player.findOne({
-    userId: req.params.id,
+    userId: req.user.id,
   });
 
   if (!player) {
