@@ -1,4 +1,4 @@
-const player = require("../models/Player");
+const Player = require("../models/Player");
 
 module.exports = async (message) => {
   const username = message.author.username;
@@ -7,9 +7,16 @@ module.exports = async (message) => {
     size: 512,
   });
 
+  const player = await Player.findOne({
+    discordId: message.author.id,
+  });
+
+  if (!player) return;
+
   if (player.username !== username || player.avatar !== avatar) {
     player.username = username;
     player.avatar = avatar;
+
     await player.save();
   }
 };
