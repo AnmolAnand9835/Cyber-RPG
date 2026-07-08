@@ -84,7 +84,7 @@ module.exports = [
     price: 500000,
   },
   {
-    id: "Kovoso",
+    id: "kovoso",
     name: "Kovoso",
     emoji: "🤢",
     icon: "Atom",
