@@ -76,7 +76,7 @@ client.on("messageCreate", (message) => {
   }
 
   if (message.content.startsWith("sudo")){
-    update()
+    update(message)
   }
     if (message.content === "sudo leaderboard") {
       leaderBoard(message);
