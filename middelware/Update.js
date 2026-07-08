@@ -11,7 +11,7 @@ module.exports = async (message) => {
     discordId: message.author.id,
   });
 
-  if (!player) return;
+  if (!player) return `Please just use (sudo start) to regester as a user.`;
 
   if (player.username !== username || player.avatar !== avatar) {
     player.username = username;
