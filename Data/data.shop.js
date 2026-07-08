@@ -83,4 +83,11 @@ module.exports = [
     icon: "Atom",
     price: 500000,
   },
+  {
+    id: "Kovoso",
+    name: "Kovoso",
+    emoji: "🤢",
+    icon: "Atom",
+    price: 2,
+  }
 ];
