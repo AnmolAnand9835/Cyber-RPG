@@ -26,7 +26,27 @@ const playerSchema = new mongoose.Schema({
 
   inventory: {
     type: [String],
-    default: [`💻 Old Laptop`, `📡 WiFi Adapter`, `🔋 Battery Pack`],
+    default: [  {
+    id: "wifi",
+    name: "WiFi",
+    emoji: "📡",
+    icon: "Wifi",
+    price: 300,
+  },
+  {
+    id: "battery",
+    name: "Battery",
+    emoji: "🔋",
+    icon: "Battery",
+    price: 200,
+  },
+  {
+    id: "laptop",
+    name: "Laptop",
+    emoji: "💻",
+    icon: "Laptop",
+    price: 1000,
+  },],
   },
 
   xp: {

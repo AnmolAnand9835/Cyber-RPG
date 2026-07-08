@@ -25,7 +25,7 @@ module.exports = async(message) =>{
   }
 
   player.credits -= item.price;
-  player.inventory.push(item.name);
+  player.inventory.push(item);
   
 
   message.reply(
