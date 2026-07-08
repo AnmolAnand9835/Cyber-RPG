@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const playerSchema = new mongoose.Schema({
-  avatar:{
+  avatar: {
     type: String,
     require: true,
-    unique:true,
+    unique: true,
   },
 
   userId: {
@@ -25,28 +25,30 @@ const playerSchema = new mongoose.Schema({
   },
 
   inventory: {
-    type: [String],
-    default: [  {
-    id: "wifi",
-    name: "WiFi",
-    emoji: "📡",
-    icon: "Wifi",
-    price: 300,
-  },
-  {
-    id: "battery",
-    name: "Battery",
-    emoji: "🔋",
-    icon: "Battery",
-    price: 200,
-  },
-  {
-    id: "laptop",
-    name: "Laptop",
-    emoji: "💻",
-    icon: "Laptop",
-    price: 1000,
-  },],
+    type: [Object],
+    default: [
+      {
+        id: "wifi",
+        name: "WiFi",
+        emoji: "📡",
+        icon: "Wifi",
+        price: 300,
+      },
+      {
+        id: "battery",
+        name: "Battery",
+        emoji: "🔋",
+        icon: "Battery",
+        price: 200,
+      },
+      {
+        id: "laptop",
+        name: "Laptop",
+        emoji: "💻",
+        icon: "Laptop",
+        price: 1000,
+      },
+    ],
   },
 
   xp: {
