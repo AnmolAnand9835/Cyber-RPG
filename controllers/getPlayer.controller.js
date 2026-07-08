@@ -6,6 +6,7 @@ const getPlayer = async (req, res) => {
   });
 
   if (!player) {
+    console.log(req.user)
     return res.status(404).json({
       message: "Player not found",
     });
