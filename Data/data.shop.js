@@ -88,6 +88,6 @@ module.exports = [
     name: "Kovoso",
     emoji: "🤢",
     icon: "Atom",
-    price: 2,
+    price: 20000000000,
   }
 ];
