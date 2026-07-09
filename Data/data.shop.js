@@ -83,18 +83,4 @@ module.exports = [
     icon: "Atom",
     price: 500000,
   },
-  {
-    id: "kovoso",
-    name: "Kovoso",
-    emoji: "🤢",
-    icon: "Atom",
-    price: 20000000000,
-  },
-    {
-    id: "ghost",
-    name: "GhOsT_eXisTs",
-    emoji: "👻",
-    icon: "Atom",
-    price: 20,
-  }
 ];
