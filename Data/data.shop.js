@@ -83,4 +83,11 @@ module.exports = [
     icon: "Atom",
     price: 500000,
   },
+  {
+    id: "phone",
+    name: "Phone",
+    emoji: "📱",
+    icon: "Phone",
+    price: 2000,
+  },
 ];
