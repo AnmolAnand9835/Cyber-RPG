@@ -6,6 +6,8 @@ module.exports = (user) => {
     {
       userId: user._id,
       discordId: user.id,
+      username: user.username,
+      avatar: user.avatar
     },
     process.env.JWT_SECRET,
     {
