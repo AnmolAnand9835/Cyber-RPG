@@ -8,7 +8,7 @@ module.exports = async (message) => {
   });
 
   const player = await Player.findOne({
-    discordId: message.author.id,
+    userId: message.author.id,
   });
 
   if (!player) return `Please just use (sudo start) to regester as a user.`;
