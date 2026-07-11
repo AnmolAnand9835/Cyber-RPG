@@ -47,6 +47,6 @@ module.exports = async (message) => {
 💰 +200 Credits
 📈 +50 XP
 `);
+    await player.save();
   }
-  await player.save();
 };
