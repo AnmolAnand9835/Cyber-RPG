@@ -23,7 +23,7 @@ router.get("/auth/discord", async (req, res) => {
     scope: [Scopes.Identify],
   });
 
-  res.redirect(result.url);
+  res.redirect(result.url); 
 });
 
 router.get("/auth/discord/callback", async (req, res) => {

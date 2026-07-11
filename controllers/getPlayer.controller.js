@@ -6,8 +6,10 @@ const getPlayer = async (req, res) => {
   });
 
   if (!player) {
-    return res.status(404).json({
-      message: "Player not found",
+    player = await Player.create({
+      userId: req.user.discordId,
+      username: req.user.username,
+      avatar: req.user.avatar
     });
   }
 
