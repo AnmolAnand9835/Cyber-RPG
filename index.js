@@ -91,7 +91,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://dazzling-peony-47b40c.netlify.app/"],
+    origin: ["http://localhost:5173", "https://dazzling-peony-47b40c.netlify.app"],
     credentials: true,
   }),
 );
