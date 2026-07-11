@@ -12,7 +12,7 @@ const getPlayer = async (req, res) => {
       avatar: req.user.avatar
     });
 
-    return res.json(newPlayer)
+    return res.json(newPlayer);
   }
 
   return res.json(player);
