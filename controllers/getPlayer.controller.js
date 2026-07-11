@@ -16,7 +16,6 @@ const getPlayer = async (req, res) => {
   }
 
   return res.json(player);
-  console.log(req.user)
 };
 
 module.exports = getPlayer;
