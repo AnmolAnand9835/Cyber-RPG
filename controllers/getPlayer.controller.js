@@ -6,11 +6,13 @@ const getPlayer = async (req, res) => {
   });
 
   if (!player) {
-    player = await Player.create({
+    const newPlayer = await Player.create({
       userId: req.user.discordId,
       username: req.user.username,
       avatar: req.user.avatar
     });
+
+    return res.json(newPlayer)
   }
 
   return res.json(player);
