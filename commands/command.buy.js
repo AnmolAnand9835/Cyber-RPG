@@ -32,8 +32,9 @@ module.exports = async(message) =>{
     `✅ Purchased ${item.name}
 💰 Remaining Credits: ${player.credits}`
   );
-  }
   await player.save();
+  }
+  
 }
     
 
