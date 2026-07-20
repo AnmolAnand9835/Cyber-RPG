@@ -86,6 +86,7 @@ client.on("messageCreate", (message) => {
 client.login(TOKEN);
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const cors = require("cors");
 
