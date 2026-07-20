@@ -1,6 +1,6 @@
 const Shop = require("../models/Shop");
 
-const getShopItem = (req, res) => {
+const getShopItem = async(req, res) => {
   const shopItem = await Shop.find()
   if (req.query.search) {
     const search = req.query.search.toLowerCase();
