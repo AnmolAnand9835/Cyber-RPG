@@ -1,6 +1,7 @@
-const shopItem = require("../Data/data.shop");
+const Shop = require("../models/Shop");
 
 const getShopItem = (req, res) => {
+  const shopItem = await Player.find()
   if (req.query.search) {
     const search = req.query.search.toLowerCase();
 
