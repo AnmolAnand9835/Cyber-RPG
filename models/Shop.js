@@ -26,7 +26,6 @@ const shopSchema = new mongoose.Schema({
   effect: {
     type: String,
     require: false,
-    enum: [income, damage, luck ,time]
   }
 });
 
