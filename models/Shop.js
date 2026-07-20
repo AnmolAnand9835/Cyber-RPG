@@ -4,6 +4,7 @@ const shopSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true
   },
   emoji: {
     type: String,
