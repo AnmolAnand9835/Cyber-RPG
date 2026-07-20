@@ -14,7 +14,7 @@ const getShop = async(req, res) => {
     // 4. Send a success response back to the client
     res.status(201).json({
         message: 'User created successfully!',
-        data: userData
+        data: shopData
     });
 }
 
