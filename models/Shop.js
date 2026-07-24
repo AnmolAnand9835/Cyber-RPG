@@ -9,6 +9,7 @@ const shopSchema = new mongoose.Schema({
   emoji: {
     type: String,
     required: true,
+    unique: true
   },
   price: {
     type: Number,
