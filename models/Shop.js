@@ -4,31 +4,49 @@ const shopSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    trim: true,
   },
   emoji: {
     type: String,
     required: true,
-    unique: true
   },
   price: {
     type: Number,
     required: true,
+    min: 0,
   },
   rarity: {
     type: String,
     enum: ["Common", "Rare", "Epic", "Legendary"],
+    default: "Common",
   },
-  
+
+  category: {
+    type: String,
+    enum: ["device", "internet", "tool", "robot", "vehicle", "building"],
+    required: true,
+  },
+
   description: {
     type: String,
-    require: true
+    required: true,
   },
 
   effect: {
     type: String,
-    require: false,
-  }
+    default: null,
+  },
+
+  requirements: {
+    type: [String],
+    default: [],
+  },
+
+  isAvailable: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 module.exports = mongoose.model("Shop", shopSchema);
