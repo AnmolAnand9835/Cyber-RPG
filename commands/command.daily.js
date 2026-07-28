@@ -1,6 +1,6 @@
 const Player = require("../models/Player");
 const msg = require("../Data/data.login");
-const money = 200
+let money = 200
 
 module.exports = async (message) => {
   let player = await Player.findOne({
