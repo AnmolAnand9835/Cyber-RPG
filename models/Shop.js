@@ -47,6 +47,11 @@ const shopSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
+
+  maxDurability: {
+    type: Number,
+    default: Null
+  }
 });
 
 module.exports = mongoose.model("Shop", shopSchema);
