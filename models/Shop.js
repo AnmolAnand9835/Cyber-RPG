@@ -50,7 +50,7 @@ const shopSchema = new mongoose.Schema({
 
   maxDurability: {
     type: Number,
-    default: Null
+    default: null
   }
 });
 
