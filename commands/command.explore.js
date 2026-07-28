@@ -140,7 +140,7 @@ module.exports = async (message) => {
 
       const event = outcomes[randomNumber];
       let money = event.credits;
-      let xp = evernt.xp;
+      let xp = event.xp;
 
       const hasWifi = player.inventory.some((item) => item.id === "wifi");
 
