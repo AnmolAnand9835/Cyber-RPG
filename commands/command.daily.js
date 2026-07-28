@@ -1,6 +1,7 @@
 const Player = require("../models/Player");
 const msg = require("../Data/data.login");
-let money = 200
+let money = 200;
+let xp = 50;
 
 module.exports = async (message) => {
   let player = await Player.findOne({
@@ -30,12 +31,13 @@ module.exports = async (message) => {
 
     if (hasWifi) {
       money *= 2;
+      xp *= 2;
     }
     player.credits = credits + money;
     player.lastDaily = now;
 
     const XP = player.xp;
-    player.xp = XP + 50;
+    player.xp = XP + xp;
 
     while (player.xp >= player.level * 100) {
       player.xpNeeded = player.level * 100;
@@ -50,8 +52,8 @@ module.exports = async (message) => {
     message.reply(`
 🎁 Daily Reward
 
-💰 +200 Credits
-📈 +50 XP
+💰 +${money} Credits
+📈 +${} XP
 `);
     await player.save();
   }
