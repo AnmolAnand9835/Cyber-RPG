@@ -139,14 +139,19 @@ module.exports = async (message) => {
       const randomNumber = Math.floor(Math.random() * outcomes.length);
 
       const event = outcomes[randomNumber];
+      let money = event.credits;
+      let xp = evernt.xp;
 
-      player.credits += event.credits;
-      player.xp += event.xp;
+      const hasWifi = player.inventory.some((item) => item.id === "wifi");
+
+      if (hasWifi) {
+        money *= 2;
+        xp *= 2;
+      }
+
+      player.credits += credits;
+      player.xp += xp;
       player.lastExplore = new Date();
-
-      player.xp += event.xp;
-
-      player.xp += event.xp;
 
       while (player.xp >= player.level * 100) {
         player.xpNeeded = player.level * 100;
@@ -162,8 +167,8 @@ module.exports = async (message) => {
 
       message.reply(
         `${event.message}
-💰 Credits: ${event.credits >= 0 ? "+" : ""}${event.credits}
-⭐ XP: +${event.xp}`,
+💰 Credits: ${money >= 0 ? "+" : ""}${money}
+⭐ XP: +${xp}`,
       );
     }
   }

@@ -26,7 +26,6 @@ module.exports = async (message) => {
       );
     }
 
-    const credits = player.credits;
     const hasWifi = player.inventory.some((item) => item.id === "wifi");
 
     if (hasWifi) {
