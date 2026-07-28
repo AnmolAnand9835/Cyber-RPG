@@ -1,5 +1,6 @@
 const Player = require("../models/Player");
 const msg = require("../Data/data.login");
+const money = 200
 
 module.exports = async (message) => {
   let player = await Player.findOne({
@@ -25,7 +26,12 @@ module.exports = async (message) => {
     }
 
     const credits = player.credits;
-    player.credits = credits + 200;
+    const hasWifi = player.inventory.some((item) => item.id === "wifi");
+
+    if (hasWifi) {
+      money *= 2;
+    }
+    player.credits = credits + money;
     player.lastDaily = now;
 
     const XP = player.xp;
