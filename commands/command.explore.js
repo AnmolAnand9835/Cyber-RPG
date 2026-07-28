@@ -149,7 +149,7 @@ module.exports = async (message) => {
         xp *= 2;
       }
 
-      player.credits += credits;
+      player.credits += money;
       player.xp += xp;
       player.lastExplore = new Date();
 
