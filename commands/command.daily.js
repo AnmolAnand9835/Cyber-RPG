@@ -53,7 +53,7 @@ module.exports = async (message) => {
 🎁 Daily Reward
 
 💰 +${money} Credits
-📈 +${} XP
+📈 +${xp} XP
 `);
     await player.save();
   }
