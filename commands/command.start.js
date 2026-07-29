@@ -15,14 +15,11 @@ module.exports = async (message) => {
       }),
     });
     message.reply(`
-    [ welcome to Dyno RPG a game for hacker ]
+    [ welcome to Cyber RPG ]
 👤 Operative Created
 ⭐ Level: 1
 📈XP:0
 💰 Credits: 500
-
-💻 Starter Gear:
-Old Laptop
 
 [if you want to get know all the command just type (sudo help)]
 `);

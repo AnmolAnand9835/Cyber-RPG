@@ -14,18 +14,25 @@ module.exports = [
     price: 200,
   },
   {
+    id: "laptop",
+    name: "Laptop",
+    emoji: "💻",
+    icon: "Laptop",
+    price: 1000,
+  },
+  {
     id: "gaminglaptop",
     name: "Gaming Laptop",
     emoji: "💻",
     icon: "Laptop",
-    price: 1000,
+    price: 3000,
   },
   {
     id: "minibot",
     name: "Mini Bot",
     emoji: "🤖",
     icon: "Bot",
-    price: 3000,
+    price: 5000,
   },
   {
     id: "keyboard",
