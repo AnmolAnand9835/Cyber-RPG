@@ -32,6 +32,7 @@ module.exports = async (message) => {
       money *= 2;
       xp *= 2;
     }
+    const credits = player.credits
     player.credits = credits + money;
     player.lastDaily = now;
 
