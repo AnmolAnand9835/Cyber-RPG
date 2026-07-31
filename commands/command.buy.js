@@ -1,6 +1,6 @@
 const Player = require("../models/Player");
 const msg = require("../Data/data.login");
-const shop = require('../Data/data.shop')
+const shop = require('../models/Shop')
 module.exports = async(message) =>{
   let player = await Player.findOne({
     userId: message.author.id,
@@ -11,7 +11,9 @@ module.exports = async(message) =>{
       const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
-  const item = shop.find((element) => element.id === itemName);
+  const item = await shop.findOne({
+    name: itemName
+  });
 
 
   if (!item) {

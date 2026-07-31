@@ -23,7 +23,8 @@ const cash = require("./commands/command.cash");
 const leaderBoard = require("./commands/command.leader");
 const help = require("./commands/command.help");
 const update = require("./middelware/Update");
-const quit = require("./commands/command.quit")
+const quit = require("./commands/command.quit");
+const mission = require("./commands/command.mission")
 
 const client = new Client({
   intents: [
@@ -86,6 +87,9 @@ client.on("messageCreate", (message) => {
 
   if(message.content === "sudo quit"){
     quit(message);
+  }
+  if(message.content === "sudo mission"){
+    mission(message);
   }
 });
 

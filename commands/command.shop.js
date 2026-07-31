@@ -1,18 +1,16 @@
-module.exports = async(message) => {
-const shopItem = require('../models/Shop')
+module.exports = async (message) => {
+  const shopItem = require("../models/Shop");
   const { EmbedBuilder } = require("discord.js");
-  
-  const shopData = await shopItem.find()
 
-const items = Object.values(shopData)
-  .map((item) => {
-    return `${item.emoji} ${item.name} - 💰 ${item.price}`;
-  })
-  .join("\n");
+  const shopData = await shopItem.find();
 
- const inventoryEmbed = new EmbedBuilder()
-  .setTitle("🏪 Cyber Shop")
-  .setDescription(items);
+  const inventoryEmbed = new EmbedBuilder().setTitle("🏪 Cyber Shop").addFields(
+    Object.values(shopData).map((item) => ({
+      name: `${item.emoji} ${item.name}`,
+      value: `${item.description}\n💰 Price: ${item.price}`,
+      inline: true,
+    })),
+  );
 
-message.reply({ embeds: [inventoryEmbed] });
-}
+  message.reply({ embeds: [inventoryEmbed] });
+};
