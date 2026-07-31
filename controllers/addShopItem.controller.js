@@ -16,7 +16,8 @@ const getShop = async(req, res) => {
           price: shopData.price,
           rarity: shopData.rarity,
           description: shopData.description,
-          effect : shopData.effect
+          effect : shopData.effect,
+          maxDurability: shopData.maxDurability
         });
     // 4. Send a success response back to the client
     res.status(201).json({

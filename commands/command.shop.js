@@ -1,8 +1,10 @@
-module.exports = (message) => {
-const shopItem = require('../Data/data.shop')
+module.exports = async(message) => {
+const shopItem = require('../models/Shop')
   const { EmbedBuilder } = require("discord.js");
+  
+  const shopData = await shopItem.find()
 
-const items = Object.values(shopItem)
+const items = Object.values(shopData)
   .map((item) => {
     return `${item.emoji} ${item.name} - 💰 ${item.price}`;
   })
