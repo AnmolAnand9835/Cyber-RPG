@@ -15,9 +15,10 @@ const getShop = async(req, res) => {
           emoji: shopData.emoji,
           price: shopData.price,
           rarity: shopData.rarity,
+          category: shopData.category,
           description: shopData.description,
           effect : shopData.effect,
-          maxDurability: shopData.maxDurability
+          maxDurability: shopData.maxDurability,
         });
     // 4. Send a success response back to the client
     res.status(201).json({
