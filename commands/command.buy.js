@@ -8,7 +8,7 @@ module.exports = async(message) =>{
   if (!player) {
     message.reply(msg);
   }else{
-      const args = message.content.split(" ");
+  const args = message.content.split(" ");
   const itemName = args[2].toLowerCase();
 
   const item = await shop.findOne({

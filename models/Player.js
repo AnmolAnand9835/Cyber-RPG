@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const playerSchema = new mongoose.Schema({
   avatar: {
     type: String,
-    require: true,
-    unique: true,
+    required: true,
   },
 
   userId: {
@@ -15,8 +14,7 @@ const playerSchema = new mongoose.Schema({
 
   username: {
     type: String,
-    require: true,
-    unique: true,
+    required: true,
   },
 
   credits: {
@@ -57,6 +55,26 @@ const playerSchema = new mongoose.Schema({
   lastExplore: {
     type: Date,
     default: null,
+  },
+  currentMission: {
+    id: {
+      type: String,
+      default: null,
+    },
+
+    currentObjective: {
+      type: Number,
+      default: 0,
+    },
+
+    progress: {
+      type: Number,
+      default: 0,
+    },
+  },
+ completedMissions: {
+    type: [String],
+    default: [],
   },
 });
 

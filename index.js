@@ -25,6 +25,7 @@ const help = require("./commands/command.help");
 const update = require("./middelware/Update");
 const quit = require("./commands/command.quit");
 const mission = require("./commands/command.mission")
+const startMission = require("./commands/command.startMission")
 
 const client = new Client({
   intents: [
@@ -91,6 +92,10 @@ client.on("messageCreate", (message) => {
   if(message.content === "sudo mission"){
     mission(message);
   }
+
+  if(message.content.startsWith("sudo start mission")){
+    startMission(message)
+  }
 });
 
 client.login(TOKEN);
@@ -99,6 +104,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cors = require("cors");
+const commandStartMission = require("./commands/command.startMission");
 
 app.use(
   cors({

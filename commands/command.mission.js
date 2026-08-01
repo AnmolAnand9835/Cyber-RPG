@@ -18,7 +18,7 @@ module.exports = async (message) => {
 
 const embed = new EmbedBuilder()
   .setColor("#5865F2")
-  .setTitle("📜 Available Mission")
+  .setTitle(`📜 Available Mission\n **Id** ${mission.id}`)
   .setDescription("Complete missions to earn Credits, XP, and unlock new technology.")
   .addFields(
     {
@@ -50,7 +50,7 @@ const embed = new EmbedBuilder()
     }
   )
   .setFooter({
-    text: "Use /mission start to begin this mission."
+    text: `Use sudo start mission ${mission.id} to begin this mission.`
   });
   message.reply({ embeds: [embed] });
   }
