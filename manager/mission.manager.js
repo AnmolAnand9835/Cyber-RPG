@@ -53,7 +53,6 @@ const MissionManager = {
     if (player.currentMission.currentObjective >= mission.objectives.length) {
       await this.complete(player, mission);
     }
-    await player.save();
   },
 
   async complete(player, mission) {
