@@ -58,7 +58,7 @@ module.exports = [
 
     requirements: {
       level: 2,
-      previousMission: "repair_pc"
+      previousMission: ["repair_pc"]
     },
 
     objectives: [
@@ -108,7 +108,7 @@ module.exports = [
 
     requirements: {
       level: 3,
-      previousMission: "wifi_installation"
+      previousMission: ["wifi_installation"]
     },
 
     objectives: [

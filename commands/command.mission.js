@@ -14,44 +14,35 @@ module.exports = async (message) => {
       (item) => item.requirements.level <= player.level,
     );
 
-    const mission = missionArr[0]
 
-const embed = new EmbedBuilder()
-  .setColor("#5865F2")
-  .setTitle(`📜 Available Mission\n **Id** ${mission.id}`)
-  .setDescription("Complete missions to earn Credits, XP, and unlock new technology.")
-  .addFields(
-    {
-      name: "🎯 Mission",
-      value: `${mission.emoji} **${mission.name}**`,
-    },
-    {
-      name: "📝 Description",
-      value: mission.description,
-    },
-    {
-      name: "📋 Requirements",
-      value:
-        `⭐ Level: ${mission.requirements.level}\n` +
-        `🔎 PreviousMission: ${mission.requirements.previousMission ?? "None"}`,
-      inline: true,
-    },
-    {
-      name: "🎁 Rewards",
-      value:
-        `💰 ${mission.rewards.credits} Credits\n` +
-        `✨ ${mission.rewards.xp} XP`,
-      inline: true,
-    },
-    {
-      name: "📌 Status",
-      value: "🟢 Available",
-      inline: true,
+    const embeds = [];
+
+    for (const mission of missionArr) {
+      const embed = new EmbedBuilder()
+        .setColor("#5865F2")
+        .setTitle(`📜 ${mission.name}`)
+        .setDescription(mission.description)
+        .addFields(
+          {
+            name: "🎯 Mission",
+            value: `${mission.emoji} ${mission.name}`,
+          },
+          {
+            name: "🎁 Rewards",
+            value:
+              `💰 ${mission.rewards.credits} Credits\n` +
+              `✨ ${mission.rewards.xp} XP`,
+          },
+        )
+        .setFooter({
+          text: `sudo mission start ${mission.id}`,
+        });
+
+      embeds.push(embed);
     }
-  )
-  .setFooter({
-    text: `Use sudo start mission ${mission.id} to begin this mission.`
-  });
-  message.reply({ embeds: [embed] });
+
+    await message.reply({
+      embeds,
+    });
   }
 };

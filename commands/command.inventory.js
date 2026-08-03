@@ -17,7 +17,7 @@ module.exports = async (message) => {
       .addFields(
         Inventory.map((item) => ({
           name: `${item.emoji} ${item.name}`,
-          value: "Owned",
+          value: `x${item.quantity}`,
           inline: true,
         })),
       )

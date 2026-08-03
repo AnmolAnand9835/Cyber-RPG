@@ -1,14 +1,13 @@
 const Player = require("../models/Player");
 
-module.exports = async(message) => {
-      let player = await Player.findOne({
-        userId: message.author.id,
-      });
+module.exports = async (message) => {
+  const player = await Player.findOneAndDelete({
+    userId: message.author.id,
+  });
 
-      await Player.deleteOne({
-        _id: player._id,
-      });
+  if (!player) {
+    return message.reply("❌ You are not registered.");
+  }
 
-          message.reply(`👤 ${message.author.displayName} you have quit the game`);
-    await player.save();
-}
+  message.reply("✅ You have quit the game.");
+};

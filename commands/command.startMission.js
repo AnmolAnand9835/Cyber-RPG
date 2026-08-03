@@ -12,7 +12,7 @@ module.exports = async (message) => {
     const args = message.content.split(" ");
 
     if (!args[3]) {
-      return message.reply("Usage: sudo mission start <mission_id>");
+      return message.reply(`Usage: sudo mission start <mission_id>`);
     }
 
     const missionName = args[3].toLowerCase();
@@ -23,21 +23,21 @@ module.exports = async (message) => {
       return message.reply("❌ You already have an active mission.");
     }
 
+    if (!mission) {
+      return message.reply("❌ Mission not found.");
+    }
+    
+    if (player.level < mission.requirements.level) {
+      return message.reply(`❌ You need ${mission.requirements.level} level.`);
+    }
+
     if (
-      mission.requirements.completedMissions &&
-      !mission.requirements.completedMissions.every((id) =>
+      mission.requirements.previousMission &&
+      !mission.requirements.previousMission.every((id) =>
         player.completedMissions.includes(id),
       )
     ) {
       return message.reply("❌ You haven't unlocked this mission yet.");
-    }
-
-    if (!mission) {
-      return message.reply("❌ Mission not found.");
-    }
-
-    if (player.level < mission.requirements.level) {
-      return message.reply(`❌ You need ${player.level} level.`);
     }
 
     player.currentMission.id = mission.id;

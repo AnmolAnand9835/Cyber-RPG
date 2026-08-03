@@ -1,5 +1,26 @@
 const mongoose = require("mongoose");
 
+const inventorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    emoji:{
+      type: String
+    },
+    quantity: {
+      type: Number,
+      default: 1,
+    },
+    durability: {
+      type: Number,
+      default: null,
+    },
+  },
+  { _id: false }
+);
+
 const playerSchema = new mongoose.Schema({
   avatar: {
     type: String,
@@ -23,7 +44,7 @@ const playerSchema = new mongoose.Schema({
   },
 
   inventory: {
-    type: [Object],
+    type: [inventorySchema],
     default: [],
   },
 
