@@ -1,15 +1,51 @@
 module.exports = async (message) => {
   const Player = require("../models/Player");
   const msg = require("../Data/data.login");
-  const { common, uncommon, rare, epic, legendary } = require("../Data/data.outcome");
+  const {
+    common,
+    uncommon,
+    rare,
+    epic,
+    legendary,
+  } = require("../Data/data.outcome");
+  const MissionManager = require("../manager/mission.manager");
 
-  const exploreLogic = async(pool) => {
-    const outcomes = pool
+  let player = await Player.findOne({
+    userId: message.author.id,
+  });
+
+  const exploreLogic = async (pool) => {
+    const outcomes = pool;
     const randomNumber = Math.floor(Math.random() * outcomes.length);
 
     const event = outcomes[randomNumber];
     let money = event.credits;
     let xp = event.xp;
+    let item = event.item;
+
+    if (item) {
+      if (item) {
+        MissionManager.update(player,{
+          type:"explore",
+          target: item.name
+        });
+      }
+
+    const isItem = player.inventory.find(
+      (id) => id.name.toLowerCase() === item.name,
+    );
+
+    if (!isItem) {
+      player.inventory.push({
+        name: item.name,
+        emoji: item.emoji,
+        durablity: null,
+        quantity: 1,
+      });
+    } else {
+      isItem.quantity++;
+    }
+    }
 
     const hasWifi = player.inventory.some((item) => item.id === "wifi");
 
@@ -41,21 +77,18 @@ module.exports = async (message) => {
 💰 Credits: ${money >= 0 ? "+" : ""}${money}
 ⭐ XP: +${xp}`,
     );
-  }
+  };
 
-  let player = await Player.findOne({
-    userId: message.author.id,
-  });
-
-  const hasLaptop = player.inventory.some((item) => item.id === "laptop" || "gaminglaptop")
+  const hasLaptop = player.inventory.some(
+    (item) => item.name.toLowerCase() === "laptop" ,
+  );
 
   let cooldown;
 
-  if(!hasLaptop){
-  cooldown = 30 * 1000; // 30 seconds
-  }
-  else{
-    cooldown = 15 * 1000;
+  if (!hasLaptop) {
+    cooldown = 5 * 1000; // 30 seconds
+  } else {
+    cooldown = 3 * 1000;
   }
   if (!player) {
     message.reply(msg);
@@ -63,8 +96,9 @@ module.exports = async (message) => {
     if (player.lastExplore && Date.now() - player.lastExplore < cooldown) {
       return message.reply("⏳ Wait before exploring again!");
     } else {
+      console.log(hasLaptop)
       if (!hasLaptop) {
-        exploreLogic(common)
+        exploreLogic(common);
       } else {
         const roll = Math.floor(Math.random() * 1000) + 1;
 
@@ -82,9 +116,8 @@ module.exports = async (message) => {
           pool = legendary;
         }
 
-        exploreLogic(pool)
+        exploreLogic(pool);
       }
-
     }
   }
 };

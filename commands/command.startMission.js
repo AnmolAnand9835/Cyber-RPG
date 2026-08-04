@@ -18,6 +18,11 @@ module.exports = async (message) => {
     const missionName = args[3].toLowerCase();
 
     const mission = missions.find((item) => item.id === missionName);
+    const isCompleate = player.completedMissions.find((item) => item === missionName)
+
+    if(isCompleate){
+      return message.reply("❌ you have already done this mission")
+    }
 
     if (player.currentMission.id) {
       return message.reply("❌ You already have an active mission.");

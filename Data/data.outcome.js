@@ -9,26 +9,35 @@ const common = [
     message: "🖥️ You found a Broken PC.",
     credits: 0,
     xp: 5,
-    item: "broken_pc",
+    item: {
+      name: "broken_pc",
+      emoji: "🖥️",
+    },
   },
   {
     message: "🔋 Found a Battery Pack!",
     credits: 20,
     xp: 5,
-    item: "battery",
+    item: {
+      name: "battery",
+      emoji: "🔋",
+    },
   },
   {
     message: "⌨️ Found a Mechanical Keyboard.",
     credits: 0,
     xp: 4,
-    item: "keyboard",
+    item: {
+      name:"keyboard",
+      emoji: "⌨️"
+    },
   },
-  {
-    message: "📱 Found a Damaged Phone.",
-    credits: 0,
-    xp: 4,
-    item: "damaged_phone",
-  },
+  // {
+  //   message: "📱 Found a Damaged Phone.",
+  //   credits: 0,
+  //   xp: 4,
+  //   item: "damaged_phone",
+  // },
   {
     message: "💰 Found Credits on the Ground!",
     credits: 10,
@@ -53,12 +62,12 @@ const common = [
     xp: 5,
     item: null,
   },
-  {
-    message: "📦 Found Some Scrap Electronics.",
-    credits: 35,
-    xp: 10,
-    item: "scrap Electronics",
-  },
+  // {
+  //   message: "📦 Found Some Scrap Electronics.",
+  //   credits: 35,
+  //   xp: 10,
+  //   item: "scrap Electronics",
+  // },
   {
     message: "❌ Nothing interesting happened.",
     credits: 0,

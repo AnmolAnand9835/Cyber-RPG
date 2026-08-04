@@ -2,10 +2,11 @@ const missions = require("../Data/data.mission");
 
 const MissionManager = {
   async update(player, event) {
+
     // 1. Find the active mission
     const activeMission = player.currentMission;
 
-    if(!event){
+    if (!event) {
       return;
     }
 

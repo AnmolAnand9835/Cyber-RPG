@@ -39,12 +39,6 @@ module.exports = async (message) => {
       });
     } else {
       isItem.quantity++;
-
-      const updatedPlayer = await Player.findOne({
-        userId: message.author.id,
-      });
-
-      console.log(updatedPlayer.inventory);
     }
 
     MissionManager.update(player, {
