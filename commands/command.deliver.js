@@ -23,7 +23,7 @@ module.exports = async (message) => {
   MissionManager.update(player, {
     type: "deliver",
     target: "customer",
-  });
+  },message);
   
   await player.save();
 

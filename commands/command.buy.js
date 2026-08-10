@@ -44,7 +44,7 @@ module.exports = async (message) => {
     MissionManager.update(player, {
       type: "buy_item",
       item: itemName,
-    });
+    },message);
 
     message.reply(
       `✅ Purchased ${item.name}

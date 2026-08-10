@@ -28,7 +28,7 @@ module.exports = async (message) => {
         MissionManager.update(player,{
           type:"explore",
           target: item.name
-        });
+        },message);
       }
 
     const isItem = player.inventory.find(

@@ -52,7 +52,7 @@ module.exports = async (message) => {
   MissionManager.update(player, {
     type: "repair",
     target: "broken_pc",
-  });
+  },message);
 
   await player.save();
 

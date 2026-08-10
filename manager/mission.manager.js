@@ -1,7 +1,7 @@
 const missions = require("../Data/data.mission");
 
 const MissionManager = {
-  async update(player, event) {
+  async update(player, event, msg) {
 
     // 1. Find the active mission
     const activeMission = player.currentMission;
@@ -42,6 +42,7 @@ const MissionManager = {
     // 4. Increase progress
 
     player.currentMission.progress++;
+    msg.reply(`😀 ${mission.objectives[player.currentMission.currentObjective].description} compleated ${player.currentMission.currentObjective + 1}/${mission.objectives.length}`)
 
     // 5. If progress is enough, move to the next objective
 
@@ -52,11 +53,11 @@ const MissionManager = {
     }
 
     if (player.currentMission.currentObjective >= mission.objectives.length) {
-      await this.complete(player, mission);
+      await this.complete(player, mission, msg);
     }
   },
 
-  async complete(player, mission) {
+  async complete(player, mission, msg) {
     // give rewards
     player.currentMission.id = null;
     player.credits += mission.rewards.credits;
@@ -67,6 +68,8 @@ const MissionManager = {
 
     player.currentMission.progress = 0;
     player.currentMission.currentObjective = 0;
+
+    msg.reply('🎊 You have compleated the mission')
 
     if (!player.completedMissions.includes(mission.id)) {
       player.completedMissions.push(mission.id);
