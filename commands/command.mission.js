@@ -35,7 +35,7 @@ module.exports = async (message) => {
           },
         )
         .setFooter({
-          text: `sudo mission start ${mission.id}`,
+          text: `sudo start mision ${mission.id}`,
         });
 
       embeds.push(embed);

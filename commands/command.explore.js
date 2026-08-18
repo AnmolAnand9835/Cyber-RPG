@@ -47,7 +47,7 @@ module.exports = async (message) => {
     }
     }
 
-    const hasWifi = player.inventory.some((item) => item.id === "wifi");
+    const hasWifi = player.inventory.some((item) => item.name === "wifi");
 
     if (hasWifi) {
       if (money > 0) {
