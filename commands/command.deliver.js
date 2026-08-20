@@ -20,6 +20,8 @@ module.exports = async (message) => {
     );
   }
 
+  player.credits += 200
+
   MissionManager.update(player, {
     type: "deliver",
     target: "customer",
