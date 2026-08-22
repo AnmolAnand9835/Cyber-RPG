@@ -24,6 +24,6 @@ module.exports = async (message) => {
 [if you want to get know all the command just type (sudo help)]
 `);
   } else {
-    message.reply(`You'r already start the game lol`);
+    message.reply(`You'r already start the game`);
   }
 };
