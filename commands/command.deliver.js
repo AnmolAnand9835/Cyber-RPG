@@ -1,10 +1,15 @@
 const Player = require("../models/Player");
 const MissionManager = require("../manager/mission.manager");
+const msg = require("../Data/data.login");
 
 module.exports = async (message) => {
   let player = await Player.findOne({
     userId: message.author.id,
   });
+
+  if (!player) {
+    return message.reply(msg);
+  }
 
   const fixedPc = player.inventory.find((inv) => inv.name === "fixed_pc");
 

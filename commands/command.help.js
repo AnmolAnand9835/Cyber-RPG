@@ -23,9 +23,14 @@ const helpEmbed = new EmbedBuilder()
         "`sudo shop` - View the shop\n`sudo buy <item>` - Buy an item\n`sudo inventory` - View your inventory",
     },
     {
+      name: "📜 Missions",
+      value:
+        "`sudo mission` - View available missions\n`sudo start mission <id>` - Start a mission\n`sudo repair` - Repair a broken PC\n`sudo deliver` - Deliver a repaired PC",
+    },
+    {
       name: "🏆 Progress",
       value:
-        "`sudo leaderboard` - View top players",
+        "`sudo leaderboard` - View top players\n`sudo quit` - Delete your profile",
     }
   )
   .setFooter({

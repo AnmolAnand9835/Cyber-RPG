@@ -1,5 +1,6 @@
 const Player = require("../models/Player");
 const MissionManager = require("../manager/mission.manager");
+const msg = require("../Data/data.login");
 
 // TODO:
 // Replace this inventory logic with InventoryManager
@@ -9,6 +10,10 @@ module.exports = async (message) => {
   let player = await Player.findOne({
     userId: message.author.id,
   });
+
+  if (!player) {
+    return message.reply(msg);
+  }
 
   const toolkit = player.inventory.find((inv) => inv.name === "toolkit");
 

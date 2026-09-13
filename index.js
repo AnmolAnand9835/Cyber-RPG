@@ -26,6 +26,7 @@ const update = require("./middelware/Update");
 const quit = require("./commands/command.quit");
 const mission = require("./commands/command.mission")
 const startMission = require("./commands/command.startMission")
+const deliver = require("./commands/command.deliver")
 const repair = require("./commands/command.repair")
 
 const client = new Client({
@@ -113,8 +114,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const cors = require("cors");
-const commandStartMission = require("./commands/command.startMission");
-const deliver = require("./commands/command.deliver");
 
 app.use(
   cors({

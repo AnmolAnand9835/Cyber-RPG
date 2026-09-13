@@ -13,15 +13,22 @@ module.exports = async (message) => {
 
     const inventoryEmbed = new EmbedBuilder()
       .setTitle("🎒 Inventory")
-      .setDescription("This is the place where you see what you have.")
-      .addFields(
+      .setDescription(
+        Inventory.length
+          ? "This is the place where you see what you have."
+          : "Your inventory is empty. Use `sudo shop` or `sudo explore` to find items.",
+      )
+      .setFooter({ text: `Slots: ${Inventory.length}/20` });
+
+    if (Inventory.length) {
+      inventoryEmbed.addFields(
         Inventory.map((item) => ({
           name: `${item.emoji} ${item.name}`,
           value: `x${item.quantity}`,
           inline: true,
         })),
-      )
-      .setFooter({ text: `Slots: ${Inventory.length}/20` });
+      );
+    }
 
     message.reply({ embeds: [inventoryEmbed] });
   }

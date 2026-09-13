@@ -12,7 +12,7 @@ module.exports = async (message) => {
     const args = message.content.split(" ");
 
     if (!args[3]) {
-      return message.reply(`Usage: sudo mission start <mission_id>`);
+      return message.reply(`Usage: sudo start mission <mission_id>`);
     }
 
     const missionName = args[3].toLowerCase();
@@ -46,6 +46,10 @@ module.exports = async (message) => {
     }
 
     player.currentMission.id = mission.id;
+    player.currentMission.objectives = mission.objectives;
+    player.currentMission.reward = mission.rewards.credits;
+    player.currentMission.xp = mission.rewards.xp;
+    player.currentMission.item = mission.rewards.items;
     player.currentMission.currentObjective = 0;
     player.currentMission.progress = 0;
 

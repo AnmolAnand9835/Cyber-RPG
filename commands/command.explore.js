@@ -14,6 +14,10 @@ module.exports = async (message) => {
     userId: message.author.id,
   });
 
+  if (!player) {
+    return message.reply(msg);
+  }
+
   const exploreLogic = async (pool) => {
     const outcomes = pool;
     const randomNumber = Math.floor(Math.random() * outcomes.length);
@@ -90,34 +94,28 @@ module.exports = async (message) => {
   } else {
     cooldown = 3 * 1000;
   }
-  if (!player) {
-    message.reply(msg);
-  } else {
-    if (player.lastExplore && Date.now() - player.lastExplore < cooldown) {
-      return message.reply("⏳ Wait before exploring again!");
-    } else {
-      console.log(hasLaptop)
-      if (!hasLaptop) {
-        exploreLogic(common);
-      } else {
-        const roll = Math.floor(Math.random() * 1000) + 1;
-
-        let pool;
-
-        if (roll <= 700) {
-          pool = common;
-        } else if (roll <= 900) {
-          pool = uncommon;
-        } else if (roll <= 980) {
-          pool = rare;
-        } else if (roll <= 998) {
-          pool = epic;
-        } else {
-          pool = legendary;
-        }
-
-        exploreLogic(pool);
-      }
-    }
+  if (player.lastExplore && Date.now() - player.lastExplore < cooldown) {
+    return message.reply("⏳ Wait before exploring again!");
   }
+
+  if (!hasLaptop) {
+    return exploreLogic(common);
+  }
+
+  const roll = Math.floor(Math.random() * 1000) + 1;
+  let pool;
+
+  if (roll <= 700) {
+    pool = common;
+  } else if (roll <= 900) {
+    pool = uncommon;
+  } else if (roll <= 980) {
+    pool = rare;
+  } else if (roll <= 998) {
+    pool = epic;
+  } else {
+    pool = legendary;
+  }
+
+  return exploreLogic(pool);
 };

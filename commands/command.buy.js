@@ -10,6 +10,9 @@ module.exports = async (message) => {
     message.reply(msg);
   } else {
     const args = message.content.split(" ");
+    if (!args[2]) {
+      return message.reply("Usage: `sudo buy <item>`");
+    }
     const itemName = args[2].toLowerCase();
 
     const item = await shop.findOne({
