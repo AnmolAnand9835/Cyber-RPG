@@ -88,6 +88,31 @@ const playerSchema = new mongoose.Schema({
       default: 0,
     },
 
+    Objectives: {
+      type: [Object],
+      default: [],
+    },
+
+    reward: {
+      type: Number,
+      default: 0,
+    },
+
+    xp: {
+      type: Number,
+      default: 0,
+    },
+
+    item: {
+      type: [String],
+      default: [],
+    },
+
+    emoji: {
+      type: String,
+      default: null,
+    },
+
     progress: {
       type: Number,
       default: 0,
