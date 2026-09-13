@@ -20,7 +20,7 @@ module.exports = async (message) => {
     const mission = missions.find((item) => item.id === missionName);
     const isCompleate = player.completedMissions.find((item) => item === missionName)
 
-    if(isCompleate){
+    if (isCompleate) {
       return message.reply("❌ you have already done this mission")
     }
 
@@ -31,7 +31,7 @@ module.exports = async (message) => {
     if (!mission) {
       return message.reply("❌ Mission not found.");
     }
-    
+
     if (player.level < mission.requirements.level) {
       return message.reply(`❌ You need ${mission.requirements.level} level.`);
     }
@@ -48,6 +48,7 @@ module.exports = async (message) => {
     player.currentMission.id = mission.id;
     player.currentMission.discription = mission.description;
     player.currentMission.reward = mission.rewards.credits;
+    player.currentMission.target = mission.objectives.length;
     player.currentMission.xp = mission.rewards.xp;
     player.currentMission.item = mission.rewards.items;
     player.currentMission.emoji = mission.emoji;
