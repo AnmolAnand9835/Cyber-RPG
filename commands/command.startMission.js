@@ -46,7 +46,7 @@ module.exports = async (message) => {
     }
 
     player.currentMission.id = mission.id;
-    player.currentMission.objectives = mission.discription;
+    player.currentMission.discription = mission.description;
     player.currentMission.reward = mission.rewards.credits;
     player.currentMission.xp = mission.rewards.xp;
     player.currentMission.item = mission.rewards.items;

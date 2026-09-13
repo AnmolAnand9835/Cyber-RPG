@@ -89,7 +89,7 @@ const playerSchema = new mongoose.Schema({
     },
 
     Objectives: {
-      type: [Object],
+      type: String,
       default: [],
     },
 
