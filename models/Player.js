@@ -88,9 +88,9 @@ const playerSchema = new mongoose.Schema({
       default: 0,
     },
 
-    Objectives: {
-      type: String,
-      default: [],
+    target: {
+      type: Number,
+      default: 0,
     },
 
     reward: {
