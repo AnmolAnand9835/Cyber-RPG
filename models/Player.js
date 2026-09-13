@@ -93,6 +93,11 @@ const playerSchema = new mongoose.Schema({
       default: 0,
     },
 
+    discription: {
+      type: String,
+      default: null,
+    },
+
     reward: {
       type: Number,
       default: 0,
