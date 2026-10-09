@@ -46,7 +46,7 @@ res.cookie("token", jwtToken, {
   console.log("Has code:", Boolean(req.query.code));
   console.log("OAuth error:", req.query.error || null);
 
-res.redirect(process.env.CLIENT_REDIRECT_URL || "https://dazzling-peony-47b40c.netlify.app/" || "https://t.me/anmol_fun_bot/cyber_rpg");
+res.redirect(process.env.CLIENT_REDIRECT_URL || "https://dazzling-peony-47b40c.netlify.app/");
 });
 
 module.exports = router;
