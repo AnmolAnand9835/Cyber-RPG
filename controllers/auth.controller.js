@@ -42,7 +42,11 @@ res.cookie("token", jwtToken, {
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
-res.redirect("https://dazzling-peony-47b40c.netlify.app/");
+  console.log("CALLBACK HIT");
+  console.log("Has code:", Boolean(req.query.code));
+  console.log("OAuth error:", req.query.error || null);
+
+res.redirect(process.env.CLIENT_REDIRECT_URL || "https://dazzling-peony-47b40c.netlify.app/");
 });
 
 module.exports = router;
