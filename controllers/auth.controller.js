@@ -47,7 +47,6 @@ res.cookie("token", jwtToken, {
   console.log("OAuth error:", req.query.error || null);
 
  res.redirect(process.env.CLIENT_REDIRECT_URL || "https://dazzling-peony-47b40c.netlify.app/");
-// res.redirect("https://t.me/anmol_fun_bot/cyber_rpg");
 });
 
 module.exports = router;
