@@ -9,6 +9,7 @@ module.exports = async (message) => {
     legendary,
   } = require("../Data/data.outcome");
   const MissionManager = require("../manager/mission.manager");
+  const { addExperience } = require("../manager/progression.manager");
 
   let player = await Player.findOne({
     userId: message.author.id,
@@ -28,30 +29,30 @@ module.exports = async (message) => {
     let item = event.item;
 
     if (item) {
-      if (item) {
-        MissionManager.update(player,{
-          type:"explore",
-          target: item.name
-        },message);
+      await MissionManager.update(player, {
+        type: "explore",
+        target: item.name.toLowerCase(),
+      }, message);
+
+      const isItem = player.inventory.find(
+        (inventoryItem) => inventoryItem.name.toLowerCase() === item.name.toLowerCase(),
+      );
+
+      if (!isItem) {
+        player.inventory.push({
+          name: item.name,
+          emoji: item.emoji,
+          durability: null,
+          quantity: 1,
+        });
+      } else {
+        isItem.quantity++;
       }
+    }
 
-    const isItem = player.inventory.find(
-      (id) => id.name.toLowerCase() === item.name,
+    const hasWifi = player.inventory.some(
+      (inventoryItem) => inventoryItem.name.toLowerCase() === "wifi",
     );
-
-    if (!isItem) {
-      player.inventory.push({
-        name: item.name,
-        emoji: item.emoji,
-        durablity: null,
-        quantity: 1,
-      });
-    } else {
-      isItem.quantity++;
-    }
-    }
-
-    const hasWifi = player.inventory.some((item) => item.name === "wifi");
 
     if (hasWifi) {
       if (money > 0) {
@@ -61,20 +62,14 @@ module.exports = async (message) => {
     }
 
     player.credits += money;
-    player.xp += xp;
     player.lastExplore = new Date();
-
-    while (player.xp >= player.level * 100) {
-      player.xpNeeded = player.level * 100;
-      player.xp -= player.xpNeeded;
-      player.level++;
-
-      message.channel.send(
-        `🎉 ${message.author} reached Level ${player.level}!`,
+    const levels = addExperience(player, xp);
+    await player.save();
+    for (const level of levels) {
+      await message.channel.send(
+        `🎉 ${message.author} reached Level ${level}!`,
       );
     }
-
-    await player.save();
 
     message.reply(
       `${event.message}
@@ -84,17 +79,34 @@ module.exports = async (message) => {
   };
 
   const hasLaptop = player.inventory.some(
-    (item) => item.name.toLowerCase() === "laptop" ,
+    (item) => item.name.toLowerCase() === "laptop",
   );
 
   let cooldown;
 
   if (!hasLaptop) {
-    cooldown = 5 * 1000; // 30 seconds
+    cooldown = 5 * 1000;
   } else {
     cooldown = 3 * 1000;
   }
-  if (player.lastExplore && Date.now() - player.lastExplore < cooldown) {
+  const now = Date.now();
+  if (player.lastExplore && now - player.lastExplore.getTime() < cooldown) {
+    return message.reply("⏳ Wait before exploring again!");
+  }
+
+  player = await Player.findOneAndUpdate(
+    {
+      _id: player._id,
+      $or: [
+        { lastExplore: null },
+        { lastExplore: { $lte: new Date(now - cooldown) } },
+      ],
+    },
+    { $set: { lastExplore: new Date(now) } },
+    { new: true },
+  );
+
+  if (!player) {
     return message.reply("⏳ Wait before exploring again!");
   }
 

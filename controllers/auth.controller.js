@@ -1,33 +1,82 @@
 const express = require("express");
 const router = express.Router();
+const { randomBytes, timingSafeEqual } = require("crypto");
 
 const {
   DiscordOAuth2,
-  StateTypes,
   Scopes,
 } = require("@mgalacyber/discord-oauth2");
-const { Routes } = require("discord.js");
 const genrateToken = require("../middelware/genrateToken");
-const auth = require("../middelware/auth");
 
-const oauth2 = new DiscordOAuth2({
-  clientId: process.env.DISCORD_CLIENT_ID,
-  clientSecret: process.env.DISCORD_CLIENT_SECRET,
-  redirectUri: process.env.DISCORD_REDIRECT_URI,
-});
+const oauthConfigured = Boolean(
+  process.env.DISCORD_CLIENT_ID &&
+    process.env.DISCORD_CLIENT_SECRET &&
+    process.env.DISCORD_REDIRECT_URI,
+);
+const oauth2 = oauthConfigured
+  ? new DiscordOAuth2({
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      redirectUri: process.env.DISCORD_REDIRECT_URI,
+    })
+  : null;
+const stateCookie = "discord_oauth_state";
+const isProduction = process.env.NODE_ENV === "production";
+
+const unavailable = (res) =>
+  res.status(503).json({ message: "Discord OAuth is not configured." });
 
 // Login route
-router.get("/auth/discord", async (req, res) => {
+router.get("/discord", async (req, res) => {
+  if (!oauth2 || !process.env.JWT_SECRET) return unavailable(res);
+
+  const state = randomBytes(32).toString("hex");
   const result = await oauth2.GenerateOAuth2Url({
-    state: StateTypes.UserAuth,
+    state,
     scope: [Scopes.Identify],
   });
 
+  res.cookie(stateCookie, state, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: "lax",
+    maxAge: 10 * 60 * 1000,
+  });
   res.redirect(result.url); 
 });
 
-router.get("/auth/discord/callback", async (req, res) => {
+router.get("/discord/callback", async (req, res) => {
+  if (!oauth2 || !process.env.JWT_SECRET) return unavailable(res);
+
+  if (req.query.error) {
+    res.clearCookie(stateCookie);
+    return res.status(400).json({ message: "Discord authorization was denied." });
+  }
+
   const { code } = req.query;
+  const { state } = req.query;
+  const expectedState = req.cookies[stateCookie];
+  res.clearCookie(stateCookie, {
+    secure: isProduction,
+    sameSite: "lax",
+  });
+
+  if (
+    typeof code !== "string" ||
+    typeof state !== "string" ||
+    typeof expectedState !== "string"
+  ) {
+    return res.status(400).json({ message: "Invalid OAuth callback." });
+  }
+
+  const received = Buffer.from(state);
+  const expected = Buffer.from(expectedState);
+  if (
+    received.length !== expected.length ||
+    !timingSafeEqual(received, expected)
+  ) {
+    return res.status(400).json({ message: "Invalid OAuth state." });
+  }
 
   const token = await oauth2.GetAccessToken(code);
 
@@ -35,18 +84,17 @@ router.get("/auth/discord/callback", async (req, res) => {
 
   const jwtToken = genrateToken(user);
 
-res.cookie("token", jwtToken, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+  res.cookie("token", jwtToken, {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 
-  console.log("CALLBACK HIT");
-  console.log("Has code:", Boolean(req.query.code));
-  console.log("OAuth error:", req.query.error || null);
-
- res.redirect(process.env.CLIENT_REDIRECT_URL || "https://dazzling-peony-47b40c.netlify.app/");
+  return res.redirect(
+    process.env.CLIENT_REDIRECT_URL ||
+      "https://dazzling-peony-47b40c.netlify.app/",
+  );
 });
 
 module.exports = router;

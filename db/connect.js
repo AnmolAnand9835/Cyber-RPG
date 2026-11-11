@@ -1,7 +1,10 @@
 const mongoose = require("mongoose");
 
-module.exports = (URL) =>{
-mongoose.connect(URL)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.log(err));
-}
+module.exports = async (url) => {
+  if (!url) {
+    throw new Error("MONGO_URI is required.");
+  }
+
+  await mongoose.connect(url);
+  console.log("✅ MongoDB Connected");
+};

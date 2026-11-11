@@ -13,14 +13,18 @@ module.exports = async (message) => {
     if (!args[2]) {
       return message.reply("Usage: `sudo buy <item>`");
     }
-    const itemName = args[2].toLowerCase();
+    const itemName = args.slice(2).join(" ").trim().toLowerCase();
 
     const item = await shop.findOne({
-      name: itemName,
+      name: new RegExp(`^${itemName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i"),
     });
 
     if (!item) {
       return message.reply("❌ Item not found.");
+    }
+
+    if (!item.isAvailable) {
+      return message.reply("❌ This item is not currently available.");
     }
 
     if (player.credits < item.price) {
@@ -37,17 +41,17 @@ module.exports = async (message) => {
       player.inventory.push({
         name: item.name,
         emoji: item.emoji,
-        durablity: item.maxDurability,
+        durability: item.maxDurability,
         quantity: 1,
       });
     } else {
       isItem.quantity++;
     }
 
-    MissionManager.update(player, {
+    await MissionManager.update(player, {
       type: "buy_item",
-      item: itemName,
-    },message);
+      item: item.name.toLowerCase(),
+    }, message);
 
     message.reply(
       `✅ Purchased ${item.name}

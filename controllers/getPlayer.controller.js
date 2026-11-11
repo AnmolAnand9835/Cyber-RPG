@@ -9,7 +9,9 @@ const getPlayer = async (req, res) => {
     const newPlayer = await Player.create({
       userId: req.user.discordId,
       username: req.user.username,
-      avatar: `https://cdn.discordapp.com/avatars/${req.user.discordId}/${req.user.avatar}.png?size=512`
+      avatar: req.user.avatar
+        ? `https://cdn.discordapp.com/avatars/${req.user.discordId}/${req.user.avatar}.png?size=512`
+        : `https://cdn.discordapp.com/embed/avatars/${Number(req.user.discordId) % 5}.png`,
     });
 
     return res.json(newPlayer);

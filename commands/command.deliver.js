@@ -27,10 +27,10 @@ module.exports = async (message) => {
 
   player.credits += 200
 
-  MissionManager.update(player, {
+  await MissionManager.update(player, {
     type: "deliver",
     target: "customer",
-  },message);
+  }, message);
   
   await player.save();
 

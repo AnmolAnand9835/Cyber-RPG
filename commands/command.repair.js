@@ -47,17 +47,17 @@ module.exports = async (message) => {
     player.inventory.push({
       name: "fixed_pc",
       emoji: "🖥️",
-      durablity: null,
+      durability: null,
       quantity: 1,
     });
   }else{
   fixedPc.quantity++;
   }
 
-  MissionManager.update(player, {
+  await MissionManager.update(player, {
     type: "repair",
     target: "broken_pc",
-  },message);
+  }, message);
 
   await player.save();
 

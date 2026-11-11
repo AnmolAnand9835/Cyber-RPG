@@ -1,110 +1,140 @@
-# Cyber RPG Project Documentation
+# Cyber RPG — Architecture and Operations
 
-This document describes the current implementation in the repository. It is intentionally narrower than a product roadmap: features listed here are backed by the existing JavaScript code.
+**Status: ARCHIVED — No longer actively developed.**
 
-## Runtime architecture
+This document describes the code currently in this repository. It distinguishes written definitions from connected, playable behavior.
 
-`index.js` starts two services in one Node.js process:
+## Architecture
 
-1. A Discord.js client listens for messages beginning with `sudo` and dispatches them to handlers in `commands/`.
-2. An Express server exposes JSON endpoints under `/api` and Discord OAuth routes under `/auth/discord`.
+`index.js` is the application entry point. It loads `.env`, connects to MongoDB, creates a Discord.js client, registers Discord application commands when a client ID is configured, and starts an Express server after MongoDB and Discord startup succeed. The bot and HTTP API share one Node process.
 
-MongoDB is opened through `db/connect.js`. Player and shop records are stored with Mongoose in `models/Player.js` and `models/Shop.js`.
+```text
+Discord message / slash interaction
+              |
+              v
+       index.js dispatch
+              |
+              v
+         commands/*.js ---------> Player / Shop (Mongoose)
+              |                           |
+              +--> MissionManager         v
+                        ^              MongoDB
+                        |
+                 Data/data.mission.js
 
-## Environment variables
+Browser --> Express routes --> controllers --> Player / Shop
+   |             |                 |
+   +-- OAuth ----+                 +--> Discord OAuth2 and JWT cookie
+```
 
-| Variable | Used by | Purpose |
-| --- | --- | --- |
-| `YOUR_BOT_TOKEN` | `index.js` | Discord bot token |
-| `MONGO_URI` | `index.js`, `db/connect.js` | MongoDB connection string |
-| `PORT` | `index.js` | Express listening port |
-| `DISCORD_CLIENT_ID` | OAuth controller | Discord OAuth application ID |
-| `DISCORD_CLIENT_SECRET` | OAuth controller | Discord OAuth application secret |
-| `DISCORD_REDIRECT_URI` | OAuth controller | Registered OAuth callback URL |
-| `JWT_SECRET` | JWT middleware and token generator | Secret used to sign and verify browser session cookies |
+### Discord bot
 
-The source currently reads `JWT_SECRET` exactly. A lowercase `jwt` variable will not authenticate API requests. `CLIENT_REDIRECT_URL` is present in some local configuration but is not currently read by the server; the OAuth callback redirects to the deployed frontend URL in `controllers/auth.controller.js`.
+`index.js` listens for message commands beginning with `sudo` and for slash interactions. The prefix-command handlers receive the author's Discord ID and reply/channel methods; slash interactions are adapted to the same handler shape. Player profile refreshes are also attempted through `middelware/Update.js` on messages beginning with `sudo`.
 
-## Discord game flow
+The message-content intent is required for prefix commands. The bot also uses Guilds and Guild Messages intents. Application/slash commands are registered globally when `DISCORD_CLIENT_ID` is set; Discord may take time to propagate global command changes.
 
-### Registration and progression
+### Player registration and persistence
 
-`sudo start` creates a `Player` with 500 credits, level 1, zero XP, and an empty inventory. Exploration and daily rewards add credits and XP. XP thresholds are calculated from the current level (`level * 100`); crossing a threshold increases the level.
+`sudo start` creates a player keyed by Discord `userId`, defaulting to level 1, 500 credits, 0 XP, and an empty inventory. The authenticated `GET /api/player` endpoint can also create the player on first access, using the Discord user ID in the JWT. Bot profiles and OAuth profiles therefore map to the same `userId`.
 
-`sudo explore` selects from common outcomes when the player has no laptop. A player with a laptop can also receive uncommon, rare, epic, and legendary outcomes. A laptop shortens the exploration cooldown, and a WiFi item is intended to double positive exploration rewards.
+`sudo quit` deletes that player's MongoDB document. It is an irreversible gameplay action from the perspective of this application.
 
-### Shop and inventory
+### Database models
 
-Shop items are read from the MongoDB `Shop` collection. The static list in `Data/data.shop.js` is reference data, not an automatic seed: the collection must be populated before `sudo shop` or `sudo buy` can use those items.
+#### Player (`models/Player.js`)
 
-Inventory entries track an item name, emoji, quantity, and optional durability. The displayed inventory limit is 20 slots, but the current command handlers do not enforce that limit.
+| Field | Meaning |
+| --- | --- |
+| `userId` | Unique Discord snowflake; identity key shared by bot and OAuth |
+| `username`, `avatar` | Cached Discord display details |
+| `credits` | Game currency; default 500 |
+| `xp`, `xpNeeded`, `level` | Progression state; levels require `level * 100` XP |
+| `lastDaily`, `lastExplore` | Reward cooldown timestamps |
+| `inventory` | Array of `{ name, emoji?, quantity, durability? }` item entries |
+| `currentMission` | Current mission ID, objective index, progress, and legacy display/reward fields |
+| `completedMissions` | Completed mission IDs used for prerequisite checks |
 
-### Missions
+Inventory entries do not have a separate item ID: current gameplay identifies items by name. Name comparisons in game logic are normalized to lowercase where used. `durability` exists in the schema, but general durability consumption is not implemented. The stored field `currentMission.discription` retains its historical misspelling for compatibility with the current command.
 
-Mission definitions live in `Data/data.mission.js`; progress matching lives in `manager/mission.manager.js`.
+#### Shop (`models/Shop.js`)
 
-| ID | Required level | Prerequisite | Reward |
-| --- | ---: | --- | --- |
-| `repair_pc` | 1 | None | 100 credits, 30 XP |
-| `wifi_installation` | 2 | `repair_pc` | 350 credits, 80 XP |
-| `build_website` | 3 | `wifi_installation` | 800 credits, 150 XP |
+Shop records contain a unique name, emoji, nonnegative price, rarity, category, description, optional effect, requirements, availability, and optional maximum durability. Game commands query this collection; `Data/data.shop.js` is not automatically inserted. The creation endpoint validates model-supported values and is protected by JWT plus the `SHOP_ADMIN_DISCORD_IDS` allowlist. Purchase checks the availability flag, but the schema's `requirements` array has no defined enforcement semantics and is not currently applied.
 
-The first mission is the most complete playable path: buy a toolkit, explore for a broken PC, repair it, and deliver the fixed PC. The later mission definitions contain objectives such as travel, install, test, code, and deploy, but the current Discord command set does not yet implement handlers for all of those event types.
+The unique name index is case-sensitive at the database level even though purchase lookup is case-insensitive. Avoid creating case-variant duplicate names.
+
+## Game economy and progression
+
+- **Starting profile:** 500 credits.
+- **Daily:** 200 credits and 50 XP every 24 hours. An inventory item named `wifi` doubles both rewards.
+- **Exploration:** outcomes in `Data/data.outcome.js` award or remove credits and award XP, sometimes with an item. A `wifi` item doubles positive-credit exploration rewards and their XP. A laptop changes the rarity pool and reduces the cooldown. The implemented cooldowns are 5 seconds without a laptop and 3 seconds with one.
+- **Shop:** purchases deduct the MongoDB shop price and add one item or increase its quantity. Purchasing is also a `buy_item` mission event.
+- **Leveling:** each level threshold is `current level * 100`; XP remaining carries over. The `xpNeeded` display is set to the next level's threshold.
+- **Repair/delivery:** `sudo repair` consumes one toolkit and one `broken_pc`, then adds `fixed_pc`. `sudo deliver` consumes one `fixed_pc` and awards 200 credits.
+- **Leaderboard:** top ten player records ordered by credits.
+
+The cooldown claim for daily and exploration is guarded by a conditional MongoDB update, which rejects a second simultaneous claim. The wider economy/inventory flows are not transactional; simultaneous unrelated purchases, repairs, or rewards may still race.
+
+## Mission system
+
+`Data/data.mission.js` defines three missions. `command.startMission.js` checks level, previous mission completion, and active mission state, then stores the selected ID and objective index on the player. Commands pass event objects into `manager/mission.manager.js`. The manager only advances the current objective when event type and any defined `item`/`target` match; `amount` controls how many matching events are required. On the final objective, it marks the mission complete, grants configured credits, XP, and item rewards, and records the mission ID.
+
+Connected events:
+
+| Game action | Event |
+| --- | --- |
+| Buy item | `buy_item`, with the purchased name |
+| Find an item while exploring | `explore`, with the found item name |
+| Repair broken PC | `repair`, target `broken_pc` |
+| Deliver fixed PC | `deliver`, target `customer` |
+
+`repair_pc` is the only mission with a connected sequence end-to-end. The later mission definitions require `travel`, `install`, `test`, `code`, or `deploy` events that are not emitted by current commands; they are content definitions, not complete playable missions.
 
 ## HTTP API
 
-### Public endpoints
+All endpoints are served by the same Express process as the bot.
 
-| Method | Path | Response |
-| --- | --- | --- |
-| `GET` | `/api/stats` | `{ "uptime": number }` |
-| `GET` | `/api/players` | All player documents |
-| `GET` | `/api/shop` | All shop items; use `?search=term` to filter by name |
-| `GET` | `/api/leaderboard` | Top ten players sorted by credits |
-| `GET` | `/auth/discord` | Redirects to Discord OAuth |
-| `GET` | `/auth/discord/callback` | Creates a seven-day HTTP-only JWT cookie and redirects to the frontend |
+| Method | Path | Access | Behavior |
+| --- | --- | --- | --- |
+| `GET` | `/api/stats` | Public | Process uptime |
+| `GET` | `/api/players` | Public | Player summaries only: username, avatar, credits, level |
+| `GET` | `/api/shop` | Public | Shop listing; `?search=` filters item names |
+| `POST` | `/api/shop` | JWT + shop-admin ID allowlist | Validate and create a shop item |
+| `GET` | `/api/leaderboard` | Public | Top ten by credits; returns 404 if empty |
+| `GET` | `/api/player` | JWT | Returns or creates the authenticated user's player record |
+| `GET` | `/me` | JWT | Returns the decoded JWT claims |
+| `GET` | `/auth/discord` | OAuth configuration | Starts Discord identify authorization with a one-time state value |
+| `GET` | `/auth/discord/callback` | OAuth configuration | Validates state, exchanges code, sets JWT cookie, redirects |
 
-### Authenticated endpoints
+Authenticated routes expect an HTTP-only `token` cookie. OAuth callback failures from Discord are reported as client errors; OAuth routes report `503` if OAuth or JWT configuration is absent. The bot/API itself can run without OAuth configuration.
 
-Send the `token` cookie created by the OAuth callback.
+The `CLIENT_REDIRECT_URL` value controls the post-login redirect. CORS is restricted in `index.js` to the configured source allowlist (localhost and the historical Netlify application); add a deliberately trusted frontend origin to CORS before using a different one. Do not reflect arbitrary request origins when credentials are enabled.
 
-| Method | Path | Response |
-| --- | --- | --- |
-| `GET` | `/api/player` | Returns the authenticated player's record, creating it on first access |
-| `GET` | `/me` | Returns the decoded authenticated user payload |
+## Authentication and authorization
 
-### Shop writes
+Discord OAuth requests only the `identify` scope. The callback validates a cryptographically random state value stored in an HTTP-only cookie, obtains the Discord profile, and signs a seven-day JWT containing the Discord ID and display identity. The JWT is set as HTTP-only, `secure` and `SameSite=None` in production; local development uses a non-secure, `SameSite=Lax` cookie. `middelware/auth.js` verifies the cookie using `JWT_SECRET`.
 
-`POST /api/shop` accepts a JSON shop item and creates a MongoDB record. The current route is not protected by the JWT middleware. The controller expects `name`, `emoji`, `price`, `rarity`, `description`, and `effect`; `category` and `maxDurability` are also passed through to the model.
+The player endpoint uses `discordId` from the signed token, not a user-supplied request parameter. Shop writes additionally require the matching ID to appear in `SHOP_ADMIN_DISCORD_IDS`. Public player listing returns only display/leaderboard fields rather than inventory, mission, cooldown, or authentication data.
 
-Example request:
+## Installation and operations
 
-```json
-{
-  "name": "toolkit",
-  "emoji": "🧰",
-  "price": 2500,
-  "rarity": "Common",
-  "category": "tool",
-  "description": "A basic repair toolkit.",
-  "effect": "Repairs broken PCs"
-}
-```
+1. Install Node.js 20.19 or newer and start a MongoDB instance.
+2. Run `npm ci`.
+3. Copy `.env.example` to `.env`; provide `YOUR_BOT_TOKEN` and `MONGO_URI`.
+4. Configure OAuth variables, `JWT_SECRET`, and `CLIENT_REDIRECT_URL` only if browser login is used. Add trusted shop administrators to `SHOP_ADMIN_DISCORD_IDS` if using the shop write API.
+5. In Discord Developer Portal, enable Message Content intent if prefix commands are required. Set the OAuth callback URI exactly to `DISCORD_REDIRECT_URI`.
+6. Run `npm start`; run local tests with `npm test`.
+7. Insert the required shop records into MongoDB before attempting shop/purchase gameplay.
 
-## Data model
+There is no production deployment definition, container configuration, migration/seed runner, backup script, or frontend build in the repository. MongoDB, Discord credentials, HTTPS termination, CORS origins, and any dashboard hosting are deployment dependencies managed outside this codebase.
 
-### Player
+## Unused and incomplete modules
 
-The `Player` model stores the Discord user ID, username, avatar, credits, XP state, level, daily and exploration timestamps, inventory, active mission state, and completed mission IDs. `userId` is unique.
+- `manager/inventory.manager.js` is a fully commented-out placeholder and is not imported by the game. Existing inventory handling remains in command modules.
+- `Data/data.shop.js` is reference content and is not consumed as a seed by the running application.
+- `routes/addShopItem.route.js` is not mounted by `index.js`; shop creation is exposed through the protected `POST /api/shop` route in `routes/shop.route.js`.
+- The `Player.startReward` flag is defined but not used by current commands.
+- `Player.currentMission` contains legacy reward/display fields; current completion logic reads mission reward definitions from `Data/data.mission.js`.
 
-### Shop
+## Archival notes
 
-The `Shop` model stores a unique item name, emoji, price, rarity, category, description, optional effect, requirements, availability, and maximum durability.
-
-## Development notes
-
-- The application has one npm script: `npm start`, which runs `node index.js`.
-- There is no migration or seed script in the current `migration/` directory. Populate shop records through the API or a MongoDB client.
-- The bot requires Discord Message Content intent because command dispatch is based on message text.
-- The OAuth cookie is configured as `secure` and `sameSite: "none"`, so local browser testing may require HTTPS or a development-specific cookie configuration.
-- The API currently exposes player records and shop writes with limited authorization. Add route-level authorization before deploying administrative or private endpoints publicly.
+Retain the Git history, source files, lockfile, MIT license, and this documentation. Do not commit local `.env`, database dumps, generated build outputs, or credentials. Create an annotated release/tag only after reviewing the final diff. Database backup, hosted service shutdown, and Discord application retirement must be handled separately and only by an authorized operator.

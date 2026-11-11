@@ -50,7 +50,7 @@ module.exports = async (message) => {
     player.currentMission.reward = mission.rewards.credits;
     player.currentMission.target = mission.objectives.length;
     player.currentMission.xp = mission.rewards.xp;
-    player.currentMission.item = mission.rewards.items;
+    player.currentMission.item = mission.rewards.items || [];
     player.currentMission.emoji = mission.emoji;
     player.currentMission.currentObjective = 0;
     player.currentMission.progress = 0;

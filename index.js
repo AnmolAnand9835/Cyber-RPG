@@ -1,7 +1,15 @@
 require("dotenv").config();
 const db = require("./db/connect");
 
-db(process.env.MONGO_URI);
+const missingEnvironment = ["YOUR_BOT_TOKEN", "MONGO_URI"].filter(
+  (name) => !process.env[name],
+);
+if (missingEnvironment.length) {
+  throw new Error(
+    `Missing required environment variables: ${missingEnvironment.join(", ")}`,
+  );
+}
+const databaseConnection = db(process.env.MONGO_URI);
 
 const express = require("express");
 const app = express();
@@ -99,8 +107,24 @@ const normalizeSlashInteraction = (interaction, commandName, extraArgs = []) => 
     author,
     channel: interaction.channel,
     content: `sudo${extraArgs.length ? ` ${commandName} ${extraArgs.join(" ")}` : ` ${commandName}`}`,
-    reply: (payload) => interaction.reply(payload),
+    reply: (payload) =>
+      interaction.replied || interaction.deferred
+        ? interaction.followUp(payload)
+        : interaction.reply(payload),
   };
+};
+
+const runCommand = async (handler, message) => {
+  try {
+    await handler(message);
+  } catch (error) {
+    console.error("Discord command failed:", error);
+    try {
+      await message.reply("❌ The command could not be completed.");
+    } catch (replyError) {
+      console.error("Failed to report the command error:", replyError);
+    }
+  }
 };
 
 const client = new Client({
@@ -153,77 +177,75 @@ client.on("interactionCreate", async (interaction) => {
     commandMessage = normalizeSlashInteraction(interaction, interaction.commandName);
   }
 
-  await handler(commandMessage);
+  await runCommand(handler, commandMessage);
 });
 
 client.on("messageCreate", (message) => {
   if (message.author.bot) return;
 
   if (message.content === "sudo start") {
-    start(message);
+    runCommand(start, message);
   }
 
   if (message.content === "sudo help") {
-    help(message);
+    runCommand(help, message);
   }
 
   if (message.content === "sudo cash") {
-    cash(message);
+    runCommand(cash, message);
   }
 
   if (message.content === "sudo profile") {
-    profile(message);
+    runCommand(profile, message);
   }
 
   if (message.content === "sudo explore") {
-    explore(message);
+    runCommand(explore, message);
   }
 
   if (message.content === "sudo shop") {
-    shop(message);
+    runCommand(shop, message);
   }
 
   if (message.content === "sudo daily") {
-    daily(message);
+    runCommand(daily, message);
   }
 
   if (message.content === "sudo inventory") {
-    inventory(message);
+    runCommand(inventory, message);
   }
 
   if (message.content.startsWith("sudo buy")) {
-    buy(message);
+    runCommand(buy, message);
   }
 
   if (message.content.startsWith("sudo")) {
-    update(message);
+    runCommand(update, message);
   }
 
   if (message.content === "sudo leaderboard") {
-    leaderBoard(message);
+    runCommand(leaderBoard, message);
   }
 
   if(message.content === "sudo quit"){
-    quit(message);
+    runCommand(quit, message);
   }
   if(message.content === "sudo mission"){
-    mission(message);
+    runCommand(mission, message);
   }
 
   if(message.content.startsWith("sudo start mission")){
-    startMission(message)
+    runCommand(startMission, message);
   }
 
   if(message.content === "sudo repair"){
-    repair(message)
+    runCommand(repair, message);
   }
 
   if(message.content === "sudo deliver"){
-    deliver(message)
+    runCommand(deliver, message);
   }
 });
-
-client.login(TOKEN);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -247,6 +269,21 @@ app.use("/api/shop", require("./routes/shop.route"));
 app.use("/api/leaderboard", require("./routes/leaderboard.route"));
 app.use("/api/auth", require("./routes/auth.route"));
 app.use("/", require("./routes/me.route"));
-app.use(require("./controllers/auth.controller"));
+app.use("/auth", require("./controllers/auth.controller"));
 
-app.listen(process.env.PORT);
+const port = Number(process.env.PORT || 3000);
+if (!Number.isInteger(port) || port < 1 || port > 65535) {
+  throw new Error("PORT must be an integer between 1 and 65535.");
+}
+
+databaseConnection
+  .then(() => client.login(TOKEN))
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Cyber RPG API listening on port ${port}.`);
+    });
+  })
+  .catch((error) => {
+    console.error("Cyber RPG startup failed:", error);
+    process.exitCode = 1;
+  });
